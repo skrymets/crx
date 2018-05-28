@@ -53,4 +53,9 @@ public class Lake {
         return volume;
     }
 
+    @Override
+    public String toString() {
+        return "L(" + leftBoundary + ':' + rightBoundary + " @ " + surface + ')';
+    }
+
 }
