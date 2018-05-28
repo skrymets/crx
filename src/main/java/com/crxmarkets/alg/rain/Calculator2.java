@@ -60,7 +60,7 @@ public class Calculator2 {
 
             PeakMatcher next = pattern.nextStep(direction, i);
             if (next.matchPattern()) {
-                peaks.add(next.peak());
+                peaks.add(next.peak(prevH));
                 next = next.nextStep(direction, i); // start new discovery iteration
             }
             pattern = next;
@@ -70,7 +70,7 @@ public class Calculator2 {
         // Flush the remainig state if any.
         PeakMatcher next = pattern.nextStep(Trend.DOWN, heights.length);
         if (next.matchPattern()) {
-            peaks.add(next.peak());
+            peaks.add(next.peak(prevH));
         }
 
         return peaks;

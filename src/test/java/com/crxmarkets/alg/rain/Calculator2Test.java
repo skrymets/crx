@@ -56,7 +56,7 @@ public class Calculator2Test {
         assertEquals(1, discoverPeaks.size());
 
         List<Peak> expected = asList(
-                new Peak(asList(new Integer[]{0, 1, 2, 3, 4}))
+                new Peak(asList(new Integer[]{0, 1, 2, 3, 4}), 1)
         );
         String discoveredAsText = discoverPeaks.toString();
         System.out.println(discoveredAsText);
@@ -74,7 +74,7 @@ public class Calculator2Test {
         // "Always ascent" is the same as the only peak at the most right
         assertEquals(1, discoverPeaks.size());
         List<Peak> expected = asList(
-                new Peak(asList(new Integer[]{9}))
+                new Peak(asList(new Integer[]{9}), 10)
         );
         assertEquals(expected.toString(), discoverPeaks.toString());
     }
@@ -90,7 +90,7 @@ public class Calculator2Test {
         // "Always descent" is the same as the only peak at the most left
         assertEquals(1, discoverPeaks.size());
         List<Peak> expected = asList(
-                new Peak(asList(new Integer[]{0}))
+                new Peak(asList(new Integer[]{0}), 10)
         );
         assertEquals(expected.toString(), discoverPeaks.toString());
     }
@@ -117,19 +117,19 @@ public class Calculator2Test {
 
         List<Peak> expected;
         expected = asList(
-                new Peak(asList(new Integer[]{0})),
-                new Peak(asList(new Integer[]{3}))
+                new Peak(asList(new Integer[]{0}), 10),
+                new Peak(asList(new Integer[]{3}), 10)
         );
         assertEquals(expected.toString(), discoverPeaks.toString());
-        
+
         // -------------------------------------------------------------------------------
-        expected = asList(
-                new Peak(asList(new Integer[]{0, 1})),
-                new Peak(asList(new Integer[]{3}))
-        );
-        
         discoverPeaks = (new Calculator2())
                 .discoverPeaks(new int[]{10, 10, 2, 10});
+
+        expected = asList(
+                new Peak(asList(new Integer[]{0, 1}), 10),
+                new Peak(asList(new Integer[]{3}), 10)
+        );
         System.out.println(discoverPeaks);
         assertEquals(expected.toString(), discoverPeaks.toString());
     }
@@ -150,15 +150,15 @@ public class Calculator2Test {
         };
 
         expected = asList(
-                new Peak(asList(new Integer[]{1})),
-                new Peak(asList(new Integer[]{3})),
-                new Peak(asList(new Integer[]{6})),
-                new Peak(asList(new Integer[]{8})),
-                new Peak(asList(new Integer[]{12})),
-                new Peak(asList(new Integer[]{14})),
-                new Peak(asList(new Integer[]{17})),
-                new Peak(asList(new Integer[]{19})),
-                new Peak(asList(new Integer[]{23}))
+                new Peak(asList(new Integer[]{1}), 19),
+                new Peak(asList(new Integer[]{3}), 5),
+                new Peak(asList(new Integer[]{6}), 8),
+                new Peak(asList(new Integer[]{8}), 17),
+                new Peak(asList(new Integer[]{12}), 18),
+                new Peak(asList(new Integer[]{14}), 12),
+                new Peak(asList(new Integer[]{17}), 20),
+                new Peak(asList(new Integer[]{19}), 10),
+                new Peak(asList(new Integer[]{23}), 12)
         );
         List<Peak> discoverPeaks = (new Calculator2()).discoverPeaks(heights1);
 
@@ -176,13 +176,13 @@ public class Calculator2Test {
             6, 7, 0, 19, 19, 4, 8, 8, 8, 14, 14, 14, 12, 13, 8, 8, 12, 18, 12, 4, 11, 12, 4, 20, 2
         };
         expected = asList(
-                new Peak(asList(new Integer[]{1})),
-                new Peak(asList(new Integer[]{3, 4})),
-                new Peak(asList(new Integer[]{9, 10, 11})),
-                new Peak(asList(new Integer[]{13})),
-                new Peak(asList(new Integer[]{17})),
-                new Peak(asList(new Integer[]{21})),
-                new Peak(asList(new Integer[]{23}))
+                new Peak(asList(new Integer[]{1}), 7),
+                new Peak(asList(new Integer[]{3, 4}), 19),
+                new Peak(asList(new Integer[]{9, 10, 11}), 14),
+                new Peak(asList(new Integer[]{13}), 13),
+                new Peak(asList(new Integer[]{17}), 18),
+                new Peak(asList(new Integer[]{21}), 12),
+                new Peak(asList(new Integer[]{23}), 20)
         );
         discoverPeaks = (new Calculator2()).discoverPeaks(heights2);
 

@@ -15,7 +15,6 @@
  */
 package com.crxmarkets.alg.rain;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,17 +27,21 @@ public class Peak implements Comparable<Peak> {
      */
     final List<Integer> indexes;
 
-    Peak(List<Integer> indexes) {
+    final Integer height;
+
+    Peak(List<Integer> indexes, Integer h) {
         Objects.requireNonNull(indexes);
+        Objects.requireNonNull(h);
         if (indexes.isEmpty()) {
             throw new IllegalArgumentException();
         }
         this.indexes = indexes;
+        this.height = h;
     }
 
     @Override
     public String toString() {
-        return "P(" + indexes.toString() + ')';
+        return "P(" + indexes.toString() + " @ " + height + ')';
     }
 
     @Override
@@ -46,15 +49,15 @@ public class Peak implements Comparable<Peak> {
         if (other == null) {
             return 1;
         } else {
-            //TODO: As the list is final, we can calculate and save max() once
-            return Collections.max(this.indexes).compareTo(Collections.max(other.indexes));
+            return this.height.compareTo(other.height);
         }
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.indexes);
+        hash = 59 * hash + Objects.hashCode(this.indexes);
+        hash = 59 * hash + Objects.hashCode(this.height);
         return hash;
     }
 
@@ -70,6 +73,9 @@ public class Peak implements Comparable<Peak> {
             return false;
         }
         final Peak other = (Peak) obj;
+        if (!Objects.equals(this.height, other.height)) {
+            return false;
+        }
         if (!Objects.equals(this.indexes, other.indexes)) {
             return false;
         }

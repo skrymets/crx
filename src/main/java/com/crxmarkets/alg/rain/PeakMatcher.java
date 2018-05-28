@@ -35,7 +35,7 @@ public interface PeakMatcher {
 
     public boolean matchPattern();
 
-    public Peak peak();
+    public Peak peak(Integer height);
 }
 
 class GoingDownState implements PeakMatcher {
@@ -73,7 +73,7 @@ class GoingDownState implements PeakMatcher {
     }
 
     @Override
-    public Peak peak() {
+    public Peak peak(Integer height) {
         return null;
     }
 }
@@ -109,7 +109,7 @@ class GoingUpState implements PeakMatcher {
     }
 
     @Override
-    public Peak peak() {
+    public Peak peak(Integer height) {
         return null;
     }
 }
@@ -145,7 +145,7 @@ class OnPlateauState implements PeakMatcher {
     }
 
     @Override
-    public Peak peak() {
+    public Peak peak(Integer height) {
         return null;
     }
 }
@@ -182,7 +182,7 @@ class InitialState implements PeakMatcher {
     }
 
     @Override
-    public Peak peak() {
+    public Peak peak(Integer height) {
         return null;
     }
 
@@ -225,7 +225,7 @@ class CompletePatternState implements PeakMatcher {
     }
 
     @Override
-    public Peak peak() {
-        return new Peak(new LinkedList<>(peakIndexes));
+    public Peak peak(Integer height) {
+        return new Peak(new LinkedList<>(peakIndexes), height);
     }
 }
