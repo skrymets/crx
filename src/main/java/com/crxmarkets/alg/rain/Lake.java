@@ -27,15 +27,15 @@ public class Lake implements Comparable<Lake> {
     final Integer rightBoundary;
     final Integer surface;
 
-    public Lake(Integer leftShore, Integer rightShore, Integer surface) {
-        Objects.requireNonNull(leftShore);
-        Objects.requireNonNull(rightShore);
+    public Lake(Integer leftBoundary, Integer rightBoundary, Integer surface) {
+        Objects.requireNonNull(leftBoundary);
+        Objects.requireNonNull(rightBoundary);
         Objects.requireNonNull(surface);
-        if ((leftShore > rightShore) || leftShore < 0 || rightShore < 0) {
+        if ((leftBoundary > rightBoundary) || leftBoundary < 0 || rightBoundary < 0) {
             throw new IllegalArgumentException("Invalid boundaries indexes");
         }
-        this.leftBoundary = leftShore;
-        this.rightBoundary = rightShore;
+        this.leftBoundary = leftBoundary;
+        this.rightBoundary = rightBoundary;
         this.surface = surface;
     }
 
