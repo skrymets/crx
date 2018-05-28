@@ -207,7 +207,7 @@ class CompletePatternState implements PeakMatcher {
             // After complete state a new plateau can never lead us to a peak.
             // A peak starts only after ascent.
             // So, we consider that we still are descending
-            // Dis will prevent us to resolve uncertainty about whether
+            // This will prevent us to resolve uncertainty about whether
             // this plateau should end up with a peak or not.
             case DOWN:
                 peakIndexes.clear();
