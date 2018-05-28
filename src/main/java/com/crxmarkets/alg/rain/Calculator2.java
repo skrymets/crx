@@ -18,7 +18,11 @@ package com.crxmarkets.alg.rain;
 import com.crxmarkets.alg.rain.PeakMatcher.Trend;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -29,14 +33,83 @@ public class Calculator2 {
     public static void main(String[] args) {
     }
 
-    public List<Peak> discoverPeaks(int[] heights) {
+    static List<Peak> filterPeaksByIndexes(List<Peak> peaks, int start, int end) {
+        if (peaks == null || peaks.isEmpty() || start > end || start < 0 || end < 0) {
+            return Collections.emptyList();
+        }
+        return peaks.stream().filter((Peak p) -> {
+            int firstIndex = p.indexes.get(0);
+            int lastIndex = p.indexes.get(p.indexes.size() - 1);
+            return (firstIndex >= start && firstIndex <= end) || (lastIndex >= start && lastIndex <= end);
+        }).collect(Collectors.toList());
+    }
+
+    static int getLastPeakIndex(Peak peak) {
+        Objects.requireNonNull(peak);
+        return peak.indexes.get(peak.indexes.size() - 1);
+    }
+
+    void discoverLakes(Deque<List<Peak>> islands, List<Lake> lakesAccumulator) {
+
+        if (islands.isEmpty()) {
+            return;
+        }
+
+        List<Peak> peaks = islands.pollFirst();
+        if (peaks == null || peaks.size() < 2) {
+            // Lakes can exist only between two peaks
+            // thus there is no lake in this island
+            return;
+        }
+        /* -------------------------------------------------------------------------------
+         * Overview 
+         * -------------------------------------------------------------------------------
+         * 1. Find two highest peaks
+         * 2. Create a lake between them
+         * 3. Remove all the peaks that were sank by this lake from further processing
+         *    by processing only leftmost and rightmost remainig parts of the current 
+         *    island (including these two highests peaks)
+         */
+
+        // Step 1. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        List<Peak> sortedPeaks = new ArrayList<>(peaks);
+        Collections.sort(sortedPeaks);
+        Collections.reverse(sortedPeaks); // highest first
+
+        // Peaks' indexes (intervals) can't intersect or be coincedent, so it's safe to
+        // compare max() of their values
+        boolean firstIsLeft
+                = Collections.max(sortedPeaks.get(0).indexes)
+                < Collections.max(sortedPeaks.get(1).indexes);
+
+        Peak leftPeak = (firstIsLeft) ? sortedPeaks.get(0) : sortedPeaks.get(1);
+        Peak rightPeak = (firstIsLeft) ? sortedPeaks.get(1) : sortedPeaks.get(0);
+
+        // Step 2. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Lake lake = new Lake(
+                getLastPeakIndex(leftPeak) + 1,
+                rightPeak.indexes.get(0) - 1,
+                Math.min(leftPeak.height, rightPeak.height)
+        );
+        lakesAccumulator.add(lake);
+
+        // Step 3. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        List<Peak> leftIsland = filterPeaksByIndexes(peaks, 0, leftPeak.indexes.get(0));
+        islands.addLast(leftIsland);
+
+        List<Peak> rightIsland = filterPeaksByIndexes(peaks, getLastPeakIndex(rightPeak), Integer.MAX_VALUE);
+        islands.addLast(rightIsland);
+
+        discoverLakes(islands, lakesAccumulator);
+    }
+
+    List<Peak> discoverPeaks(int[] heights) {
 
         // Is there enough data for at least two peaks?
         if (heights == null || heights.length < 3) {
             return Collections.emptyList();
         }
 
-        // Find all peacks ---------------------------------------------------------------
         List<Peak> peaks = new ArrayList<>();
 
         int prevH = heights[0]; // previous' height initial value;
