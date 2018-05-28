@@ -51,7 +51,7 @@ public class Calculator2 {
 
     void discoverLakes(Deque<List<Peak>> islands, List<Lake> lakesAccumulator) {
 
-        if (islands.isEmpty()) {
+        if (islands == null || islands.isEmpty()) {
             return;
         }
 

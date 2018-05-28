@@ -16,7 +16,7 @@
 package com.crxmarkets.alg.rain;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,17 +26,20 @@ import java.util.List;
 public class Application {
 
     public static void main(String[] args) {
-        int[] heights = {0, 3, 0, 4, 1, 4, 0, 3, 0};
-        List<Peak> peaks = new Calculator2().discoverPeaks(heights);
-        
-        if (peaks.size() != 4) {
-            throw new RuntimeException();
-        }
-        
-        List<Peak> sortedPeaks = new ArrayList<>(peaks.size());
-        Collections.copy(peaks, sortedPeaks);
-        Collections.reverse(sortedPeaks); // Highest first
-        
+        //int[] heights = {0, 3, 0, 4, 1, 2, 1, 4, 0, 3, 0};
+        int[] heights = {3, 0, 2, 1, 4};
+
+        Calculator2 calc = new Calculator2();
+
+        List<Peak> peaks = calc.discoverPeaks(heights);
+
+        List<Lake> lakes = new ArrayList<>();
+        LinkedList<List<Peak>> taskQueue = new LinkedList<>();
+        taskQueue.add(peaks);
+        (calc).discoverLakes(taskQueue, lakes);
+
+        System.out.println("peaks: " + peaks.toString());
+        System.out.println("lakes: " + lakes.toString());
 
     }
 

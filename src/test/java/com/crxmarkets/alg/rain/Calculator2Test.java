@@ -15,12 +15,13 @@
  */
 package com.crxmarkets.alg.rain;
 
-import com.crxmarkets.alg.rain.Peak;
-import com.crxmarkets.alg.rain.Calculator2;
 import static java.util.Arrays.asList;
+import java.util.Collections;
+import static java.util.Collections.singletonList;
+import java.util.LinkedList;
 import java.util.List;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  *
@@ -193,4 +194,70 @@ public class Calculator2Test {
         // -------------------------------------------------------------------------------
     }
 
+    @Test
+    public void testDiscoverLakesInvalidInput() {
+        System.out.println("testDiscoverLakesInvalidInput");
+        Calculator2 calc = new Calculator2();
+        List<Lake> discoveredLakes = null; // new LinkedList<>();
+        calc.discoverLakes(null, discoveredLakes);
+        assertTrue(true);
+
+        discoveredLakes = new LinkedList<>();
+        calc.discoverLakes(null, discoveredLakes);
+        assertNotNull(discoveredLakes);
+        assertTrue(discoveredLakes.isEmpty());
+    }
+
+    @Test
+    public void testDiscoverNoLakesOnSinglePeak() {
+        System.out.println("testDiscoverNoLakesOnSinglePeak");
+        int[] heights = new int[]{0, 5, 5, 5, 0};
+        List<Lake> discoveredLakes = new LinkedList<>();
+
+        Calculator2 calc = new Calculator2();
+        List<Peak> peaks = calc.discoverPeaks(heights);
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes);
+        assertTrue(discoveredLakes.isEmpty());
+    }
+
+    @Test
+    public void testDiscoverSimpleLakes() {
+        System.out.println("testDiscoverSimpleLakes");
+
+        int[] heights = new int[]{3, 0, 0, 8, 4, 6};
+
+        Calculator2 calc = new Calculator2();
+        List<Peak> peaks = calc.discoverPeaks(heights);
+        List<Lake> discoveredLakes = new LinkedList<>();
+
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes);
+
+        Collections.sort(discoveredLakes);
+        List<Lake> expected = asList(
+                new Lake(1, 2, 3),
+                new Lake(4, 4, 6)
+        );
+
+        String discoveredAsText = discoveredLakes.toString();
+        System.out.println(discoveredAsText);
+        assertEquals(expected.toString(), discoveredAsText);
+    }
+
+    @Test
+    public void testDiscoverNoLakesOnPureSlopes() {
+        System.out.println("testDiscoverNoLakesOnPureSlopes");
+
+        int[] slopeDown = new int[]{5, 4, 3, 2, 1, 0};
+        Calculator2 calc = new Calculator2();
+        List<Peak> peaks = calc.discoverPeaks(slopeDown);
+        List<Lake> discoveredLakes = new LinkedList<>();
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes);
+        assertTrue(discoveredLakes.isEmpty());
+
+        int[] slopeUp = new int[]{0, 1, 2, 3, 4, 5};
+        calc = new Calculator2();
+        peaks = calc.discoverPeaks(slopeUp);
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes);
+        assertTrue(discoveredLakes.isEmpty());
+    }
 }

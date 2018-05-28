@@ -21,7 +21,7 @@ import java.util.Objects;
  *
  * @author skrymets
  */
-public class Lake {
+public class Lake implements Comparable<Lake> {
 
     final Integer leftBoundary;
     final Integer rightBoundary;
@@ -56,6 +56,16 @@ public class Lake {
     @Override
     public String toString() {
         return "L(" + leftBoundary + ':' + rightBoundary + " @ " + surface + ')';
+    }
+
+    @Override
+    public int compareTo(Lake other) {
+        if (other == null) {
+            return 1;
+        }
+
+        // Pliase mind that lakes can not overlap each other
+        return this.rightBoundary.compareTo(other.rightBoundary);
     }
 
 }
