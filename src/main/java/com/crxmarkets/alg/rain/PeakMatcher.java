@@ -54,12 +54,11 @@ class GoingDownState implements PeakMatcher {
                 return new GoingUpState(peakIndexes);
             case FLAT:
             // Important note!
-            // When descending - a plato can never lead us to a peak.
+            // When descending - a plateau can never lead us to a peak.
             // A peak starts only after ascent.
             // So, we consider that we still are descending
-            // Dis will prevent us to resolve a resolve uncertainty about whether
+            // This will prevent us to resolve uncertainty about whether
             // this plateau should end up with a peak or not.
-            // return ON_A_PLATO_STATE;
             case DOWN:
                 return this;
             default:
@@ -205,12 +204,11 @@ class CompletePatternState implements PeakMatcher {
                 return new GoingUpState(peakIndexes);
             case FLAT:
             // Important note!
-            // After complete state a new plato can never lead us to a peak.
+            // After complete state a new plateau can never lead us to a peak.
             // A peak starts only after ascent.
             // So, we consider that we still are descending
-            // Dis will prevent us to resolve a resolve uncertainty about whether
+            // Dis will prevent us to resolve uncertainty about whether
             // this plateau should end up with a peak or not.
-            // return ON_A_PLATO_STATE;
             case DOWN:
                 peakIndexes.clear();
                 return new GoingDownState(peakIndexes);
