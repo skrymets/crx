@@ -15,10 +15,10 @@
  */
 package com.crxmarkets.alg.rain;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import com.crxmarkets.alg.rain.PeakMatcher.Trend;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -37,7 +37,7 @@ public class Calculator2 {
         }
 
         // Find all peacks ---------------------------------------------------------------
-        LinkedList<Peak> peaks = new LinkedList<>();
+        List<Peak> peaks = new ArrayList<>();
 
         int prevH = heights[0]; // previous' height initial value;
 

@@ -95,7 +95,7 @@ class GoingUpState implements PeakMatcher {
                 return this;
             case FLAT:
                 peakIndexes.add(index);
-                return new OnAPlatoState(peakIndexes);
+                return new OnPlateauState(peakIndexes);
             case DOWN:
                 return new CompletePatternState(peakIndexes);
             default:
@@ -114,11 +114,11 @@ class GoingUpState implements PeakMatcher {
     }
 }
 
-class OnAPlatoState implements PeakMatcher {
+class OnPlateauState implements PeakMatcher {
 
     private final List<Integer> peakIndexes;
 
-    OnAPlatoState(List<Integer> peakIndexes) {
+    OnPlateauState(List<Integer> peakIndexes) {
         this.peakIndexes = peakIndexes;
     }
 
@@ -168,7 +168,7 @@ class InitialState implements PeakMatcher {
                 return new GoingUpState(peakIndexes);
             case FLAT:
                 peakIndexes.add(index);
-                return new OnAPlatoState(peakIndexes);
+                return new OnPlateauState(peakIndexes);
             case DOWN:
                 return new CompletePatternState(peakIndexes);
             default:
