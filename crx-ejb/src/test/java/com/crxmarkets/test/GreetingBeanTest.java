@@ -16,16 +16,11 @@
 package com.crxmarkets.test;
 
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.shrinkwrap.descriptor.api.Descriptors;
-import org.jboss.shrinkwrap.descriptor.api.jbossdeployment10.JBossDeploymentStructureDescriptor;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,25 +34,26 @@ public class GreetingBeanTest {
 
     @Deployment
     public static JavaArchive createDeployment() {
-        JBossDeploymentStructureDescriptor descriptor = Descriptors
-                .create(JBossDeploymentStructureDescriptor.class, "jboss-deployment-structure")
-                .getOrCreateDeployment()
-                .getOrCreateExclusions()
-                .getOrCreateModule()
-                .name("logging")
-                .up().up().up();
-
-        LOG.info(descriptor.exportAsString());
+//        JBossDeploymentStructureDescriptor descriptor = Descriptors
+//                .create(JBossDeploymentStructureDescriptor.class)
+//                .getOrCreateDeployment()
+//                .getOrCreateExclusions()
+//                .getOrCreateModule()
+//                .name("org.jboss.logging")
+//                .up().up().up();
+//
+//        LOG.info(descriptor.exportAsString());
         
         JavaArchive jar = ShrinkWrap
-                .create(JavaArchive.class)
+                .create(JavaArchive.class, "crx-test.jar")
                 .addClasses(
                         VolumeCalculatorBean.class
                 // MessageProviderBean.class,
                 // TemplateType.class
                 )
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsManifestResource(new StringAsset(descriptor.exportAsString()), "jboss-deployment-structure.xml");
+//                .addAsManifestResource(new StringAsset(descriptor.exportAsString()), "jboss-deployment-structure.xml")
+                ;
         LOG.info(jar.toString(true));
         return jar;
     }
