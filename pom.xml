@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <endorsed.dir>${basedir}/endorsed</endorsed.dir>
     </properties>
     
     <modules>
@@ -113,9 +114,11 @@
                     <configuration>
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
+<!--
                         <compilerArguments>
                             <endorseddirs>${endorsed.dir}</endorseddirs>
-                        </compilerArguments>
+                        </compilerArguments> 
+-->
                     </configuration>
                 </plugin>
             </plugins>
