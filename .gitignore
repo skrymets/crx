@@ -1,1 +1,8 @@
 /target/
+/crx-calc/nbproject/
+/crx-ejb/target/
+/crx-web/target/
+/crx-calc/target/
+/crx-ear/target/
+/crx-ejb/dist
+/crx-ejb/endorsed
