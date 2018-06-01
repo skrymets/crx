@@ -10,11 +10,20 @@
     <name>crx-ee-application</name>
     
     <properties>
-        <javaee-version>7.0</javaee-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <javaee-version>7.0</javaee-version>
         <endorsed.dir>${basedir}/endorsed</endorsed.dir>
+        
+        <as.version>10.0.0.Final</as.version>
+        <as.dist>${project.basedir}/dist</as.dist>
+        <jboss.home>${as.dist}/wildfly-${as.version}</jboss.home>
+        
+        <slf4j.version>1.7.25</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <junit.version>4.12</junit.version>
     </properties>
     
     <modules>
@@ -51,21 +60,21 @@
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
+                <version>${log4j.version}</version>
                 <scope>compile</scope>
             </dependency>
             
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.25</version>
+                <version>${slf4j.version}</version>
                 <scope>compile</scope>
             </dependency>
 
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.12</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -103,11 +112,11 @@
                     <configuration>
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
-<!--
+                        <!--
                         <compilerArguments>
                             <endorseddirs>${endorsed.dir}</endorseddirs>
                         </compilerArguments> 
--->
+                        -->
                     </configuration>
                 </plugin>
             </plugins>
