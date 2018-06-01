@@ -65,10 +65,10 @@
 
     <profiles>
         <profile>
-            <id>ee-test-setup</id>
+            <id>application-server-dist</id>
             <activation>
                 <file>
-                    <missing>dist/wildfly-10.0.0.Final/README.txt</missing>
+                    <missing>${jboss.home}/README.txt</missing>
                 </file>
             </activation>
             
@@ -95,11 +95,11 @@
                                             --> 
                                             <groupId>org.wildfly</groupId>
                                             <artifactId>wildfly-dist</artifactId>
-                                            <version>10.0.0.Final</version>
+                                            <version>${as.version}</version>
                                     
                                             <type>zip</type>
                                             <overWrite>false</overWrite>
-                                            <outputDirectory>dist</outputDirectory>
+                                            <outputDirectory>${as.dist}</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
@@ -163,8 +163,8 @@
                                     <reuseForks>true</reuseForks>
                                     <systemPropertyVariables>
                                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                        <jboss.home>${project.basedir}/dist/wildfly-10.0.0.Final</jboss.home>
-                                        <module.path>${project.basedir}/dist/wildfly-10.0.0.Final/modules</module.path>
+                                        <jboss.home>${jboss.home}</jboss.home>
+                                        <module.path>${jboss.home}/modules</module.path>
                                         <!-- 
                                         --> 
                                     </systemPropertyVariables>
