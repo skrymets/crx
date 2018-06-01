@@ -6,3 +6,7 @@
 /crx-ear/target/
 /crx-ejb/dist
 /crx-ejb/endorsed
+/crx-web/dist
+/crx-web/.errai
+/crx-web/src/main/gwt-unitCache
+/crx-web/nb-configuration.xml
