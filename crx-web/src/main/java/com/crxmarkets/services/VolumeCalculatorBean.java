@@ -13,15 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.test;
+package com.crxmarkets.services;
 
+import java.util.UUID;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 
 @Stateless
-@LocalBean
-public class VolumeCalculatorBean {
+@Local
+public class VolumeCalculatorBean implements VolumeCalculatorLocalBean {
 
+    @Override
+    public String getImplementationVersion() {
+        return UUID.randomUUID().toString();
+    }
+
+    @Override
     public Long calculateVolume() {
         return 0L;
     }

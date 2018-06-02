@@ -15,9 +15,16 @@
  */
 package com.crxmarkets.web.client;
 
+import com.crxmarkets.web.client.shared.CalculatorService;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import javax.annotation.PostConstruct;
+import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jboss.errai.enterprise.client.jaxrs.api.RestClient;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 
 /**
@@ -30,7 +37,27 @@ public class ApplicationMain {
     @PostConstruct
     public void init() {
 
-        RootPanel.get().add(new Label("Hello, GWT"));
+        final Label versionLabel = new Label("What version is it?");
+
+        RemoteCallback<String> versionCallback = new RemoteCallback<String>() {
+            @Override
+            public void callback(String version) {
+                versionLabel.setText(version);
+            }
+        };
+
+        Button versionButton = new Button("Get the Version...", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                RestClient.create(
+                        CalculatorService.class,
+                        GWT.getHostPageBaseURL() + "rest", versionCallback)
+                        .getVersion();
+            }
+        });
+
+        RootPanel.get().add(versionLabel);
+        RootPanel.get().add(versionButton);
     }
 
 }
