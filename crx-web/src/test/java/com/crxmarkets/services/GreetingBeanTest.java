@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.test;
+package com.crxmarkets.services;
 
 import javax.ejb.EJB;
 import org.jboss.arquillian.container.test.api.Deployment;
