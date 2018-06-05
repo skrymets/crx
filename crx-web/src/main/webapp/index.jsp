@@ -12,8 +12,10 @@
 
         <title>Rain Volume Calculator</title>
 
-        <script type="text/javascript"  src="app/app.nocache.js"></script>
+        <!-- Bootstrap Core CSS -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
 
+        <script type="text/javascript" src="<%=contextPath%>/app/app.nocache.js"></script>
 
         <script type="text/javascript">
             erraiJaxRsApplicationRoot = "<%=contextPath%>/rest";
@@ -21,6 +23,9 @@
         </script>
     </head>
     <body>
+        <div id="rootPanel" class="container"></div>
         <iframe src="javascript:''" id="__gwt_historyFrame" style="width:0;height:0;border:0"></iframe>
+
+        <script src="<%=contextPath%>/js/bootstrap.min.js"></script>
     </body>
 </html>
