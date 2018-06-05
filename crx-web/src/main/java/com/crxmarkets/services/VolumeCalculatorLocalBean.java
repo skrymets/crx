@@ -23,8 +23,8 @@ import javax.ejb.Local;
 @Local
 public interface VolumeCalculatorLocalBean {
 
-    Long calculateVolume();
+    int[] calculateWaterLevels(int[] heights);
 
-    String getImplementationVersion();
+    int calculateTotalVolume(int[] heights, int[] levels);
 
 }
