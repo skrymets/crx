@@ -19,7 +19,6 @@ import com.crxmarkets.alg.rain.PeakMatcher.Trend;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -49,7 +48,7 @@ public class Calculator2 {
         return peak.indexes.get(peak.indexes.size() - 1);
     }
 
-    void discoverLakes(Deque<List<Peak>> islands, List<Lake> lakesAccumulator) {
+    public void discoverLakes(Deque<List<Peak>> islands, List<Lake> lakesAccumulator) {
 
         if (islands == null || islands.isEmpty()) {
             return;
@@ -103,7 +102,7 @@ public class Calculator2 {
         discoverLakes(islands, lakesAccumulator);
     }
 
-    List<Peak> discoverPeaks(int[] heights) {
+    public List<Peak> discoverPeaks(int[] heights) {
 
         // Is there enough data for at least two peaks?
         if (heights == null || heights.length < 3) {
