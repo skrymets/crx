@@ -13,30 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.web.client;
+package com.crxmarkets.web.client.local;
 
-import com.google.gwt.user.client.ui.Composite;
+import com.crxmarkets.web.client.local.JQueryProducer.JQuery;
 import com.google.gwt.user.client.ui.RootPanel;
+import elemental2.dom.HTMLDivElement;
+import elemental2.dom.HTMLDocument;
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import org.jboss.errai.ioc.client.api.EntryPoint;
+import org.jboss.errai.ui.nav.client.local.NavigationPanel;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
-import org.jboss.errai.ui.shared.api.annotations.Templated;
 
 /**
  *
  * @author skrymets
  */
 @EntryPoint
-@Templated("#root")
-public class ApplicationMain extends Composite {
+public class ApplicationSetup {
 
     @Inject
-    @DataField
-    CalculatorWidget calculatorWidget;
+    NavBar navBar;
+
+    @Inject
+    Instance<CalculatorWidget> calculatorWidget;
+
+    @Inject
+    private JQuery $;
+
+    @Inject
+    private HTMLDocument document;
 
     @PostConstruct
     public void init() {
-        RootPanel.get().add(this);
+        $.wrap($.wrap(document.body).children().first()).after(navBar.getElement());
+        $.wrap($.wrap(document.body).children().first()).after(calculatorWidget.get().getElement());
     }
 }

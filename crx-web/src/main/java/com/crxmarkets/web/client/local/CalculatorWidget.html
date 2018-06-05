@@ -21,7 +21,7 @@ limitations under the License.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <style>
-            #calcWidget {
+            #calculatorScreen {
                 width: 100%;
                 background-color: bisque;
             }
@@ -29,11 +29,11 @@ limitations under the License.
     </head>
     <body>
 
-        <div>
-            <div data-field="calcWidget">
-                <div data-field="calculationResultData"></div>
-                <button id="calculateButton">Test Result...</button>
-            </div>
+        <div id="calcWidget">
+            <canvas data-field="calculatorScreen"></canvas>
+            <div data-field="calculationResultData"></div>
+            <button id="calculateButton">Test Result...</button>
+            <button id="drawButton">Draw</button>
         </div>
 
     </body>
