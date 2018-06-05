@@ -66,7 +66,7 @@ public class GreetingBeanTest {
     public void startAndHealthCheck() {
         assertNotNull(bean);
 
-        Long volume = bean.calculateVolume();
+        Integer volume = bean.calculateTotalVolume(new int[]{}, new int[]{});
         assertEquals(volume, Long.valueOf(0));
         LOG.info(String.valueOf(volume));
     }
