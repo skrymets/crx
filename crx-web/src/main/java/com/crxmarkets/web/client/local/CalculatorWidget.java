@@ -20,6 +20,8 @@ import com.crxmarkets.web.client.shared.CalculationResult;
 import com.crxmarkets.web.client.shared.CalculationTask;
 import com.crxmarkets.web.client.shared.CalculatorResource;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -35,8 +37,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jboss.errai.enterprise.client.jaxrs.api.RestErrorCallback;
 import org.jboss.errai.ui.client.local.api.elemental2.IsElement;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
@@ -86,15 +92,32 @@ public class CalculatorWidget implements IsElement {
         
         // hills = Arrays.asList(3, 2, 1, 0, 0, 2, 1, 0, 2);
         
-        RemoteCallback<CalculationResult> callback = (CalculationResult response) -> {
-            calculationResultData.setText(response.toString());
-            draw(hills, response.getLevels());
+        RemoteCallback<Response> responseCallback = (response) -> {
+            if (response.getStatus() == Status.OK.getStatusCode()) {
+                /**
+                 * Errai's compatibility class for javax.ws.rs.core.Response does not 
+                 * support generic readEntity
+                 * org.jboss.errai.enterprise.compat.javax.ws.rs.core
+                 * errai-jaxrs-client-4.2.1.Final.jar
+                 */
+                CalculationResult entity = (CalculationResult) response.getEntity();
+                calculationResultData.setText(entity.toString());
+                draw(hills, entity.getLevels());
+            }
+        };
+        
+        ErrorCallback errorCallback = (RestErrorCallback) (Request message, Throwable throwable) -> {
+            if (throwable != null) {
+                String details = throwable.getMessage();
+                Window.alert(details);
+            }
+            return false;            
         };
 
         CalculationTask task = new CalculationTask();
         task.setHeights(hills);
         calculationData.setText(hills.toString());
-        calculatorResource.call(callback).calculate(task);
+        calculatorResource.call(responseCallback, errorCallback).calculate(task);
 
     }
 

@@ -22,6 +22,8 @@ import com.crxmarkets.web.client.shared.CalculatorResource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,14 +35,15 @@ public class CalculatorResourceImpl implements CalculatorResource {
     private VolumeCalculatorLocalBean calculatorBean;
 
     @Override
-    public CalculationResult calculate(CalculationTask task) {
-
-        // String[] stringHeights = task.getHeights().split(",");
-        // int[] h = new int[stringHeights.length];
+    public Response calculate(CalculationTask task) {
+        
+        if (task == null || task.getHeights() == null || task.getHeights().size() < 3) {
+            return Response.status(Status.BAD_REQUEST).entity("Task data is incomplete.") .build();
+        }
+        
         int[] h = new int[task.getHeights().size()];
         for (int i = 0; i < h.length; i++) {
             h[i] = task.getHeights().get(i);
-            //h[i] = Integer.valueOf(stringHeights[i].trim());
         }
 
         int[] waterLevels = calculatorBean.calculateWaterLevels(h);
@@ -52,10 +55,12 @@ public class CalculatorResourceImpl implements CalculatorResource {
         for (int i : waterLevels) {
             waterLevelsList.add(i);
         }
+        
+        result.setInput(task.getHeights());
         result.setLevels(waterLevelsList);
         result.setTotalVolume(totalVolume);
 
-        return result;
+        return Response.ok(result).build();
     }
 
 }

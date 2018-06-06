@@ -31,6 +31,8 @@ public class CalculationResult implements Serializable {
 
     private Integer totalVolume;
 
+    private List<Integer> input;
+    
     private List<Integer> levels;
 
     public CalculationResult() {
@@ -44,6 +46,14 @@ public class CalculationResult implements Serializable {
         this.totalVolume = totalVolume;
     }
 
+    public List<Integer> getInput() {
+        return input;
+    }
+
+    public void setInput(List<Integer> input) {
+        this.input = input;
+    }
+    
     public List<Integer> getLevels() {
         return levels;
     }
@@ -56,6 +66,7 @@ public class CalculationResult implements Serializable {
     public int hashCode() {
         int hash = 3;
         hash = 19 * hash + Objects.hashCode(this.totalVolume);
+        hash = 19 * hash + Objects.hashCode(this.input);
         hash = 19 * hash + Objects.hashCode(this.levels);
         return hash;
     }
@@ -75,6 +86,9 @@ public class CalculationResult implements Serializable {
         if (!Objects.equals(this.totalVolume, other.totalVolume)) {
             return false;
         }
+        if (!Objects.equals(this.input, other.input)) {
+            return false;
+        }
         if (!Objects.equals(this.levels, other.levels)) {
             return false;
         }
@@ -83,7 +97,7 @@ public class CalculationResult implements Serializable {
 
     @Override
     public String toString() {
-        return "CalculationResult{" + "totalVolume=" + totalVolume + ", levels=" + levels + '}';
+        return '{' + "vol=" + totalVolume + ", in=" + input  + ", out=" + levels + '}';
     }
 
 }
