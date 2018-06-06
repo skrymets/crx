@@ -41,7 +41,7 @@ public class VolumeCalculatorBean implements VolumeCalculatorLocalBean {
         List<Lake> lakes = new ArrayList<>();
         LinkedList<List<Peak>> taskQueue = new LinkedList<>();
         taskQueue.add(peaks);
-        calc.discoverLakes(taskQueue, lakes);
+        calc.discoverLakes(taskQueue, lakes, heights);
 
         int[] levels = Arrays.copyOf(heights, heights.length);
         for (Lake lake : lakes) {
@@ -65,7 +65,7 @@ public class VolumeCalculatorBean implements VolumeCalculatorLocalBean {
 
         int totalVolume = 0;
         for (int i = 0; i < heights.length; i++) {
-            totalVolume += levels[i] - heights[i];
+            totalVolume += (levels[i] - heights[i]);
         }
 
         return totalVolume;
