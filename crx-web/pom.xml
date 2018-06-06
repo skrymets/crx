@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <parent>
-        <artifactId>crx-ee-app</artifactId>
         <groupId>com.crxmarkets.test</groupId>
+        <artifactId>crx-ee-app</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>crx-web</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    
     <packaging>war</packaging>
     
     <name>crx-web</name>
     
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <javaee-version>7.0</javaee-version>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        
+        <as.version>10.0.0.Final</as.version>
+        <as.dist>${project.basedir}/dist</as.dist>
+        <jboss.home>${as.dist}/wildfly-${as.version}</jboss.home>
+        
+        <slf4j.version>1.7.25</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <junit.version>4.12</junit.version>
         <gwt.version>2.8.2</gwt.version>
-                
-        <runTarget>welcomeGWT.html</runTarget>
         <elemental.version>1.0.0-RC1</elemental.version>
         <jboss.errai.version>4.2.1.Final</jboss.errai.version>
         <errai.dev.context>${project.artifactId}</errai.dev.context>
@@ -34,31 +46,125 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>${javaee-version}</version>
+                <scope>provided</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-web-api</artifactId>
+                <version>${javaee-version}</version>
+                <scope>provided</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.4.0.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            
+            <dependency>
                 <groupId>org.jboss.errai.bom</groupId>
                 <artifactId>errai-bom</artifactId>
                 <version>4.2.1.Final</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            
             <dependency>
                 <groupId>com.google.gwt</groupId>
                 <artifactId>gwt-user</artifactId>
                 <version>${gwt.version}</version>
             </dependency>
+            
             <dependency>
                 <groupId>com.google.gwt</groupId>
                 <artifactId>gwt-dev</artifactId>
                 <version>${gwt.version}</version>
             </dependency>
+            
             <dependency>
                 <groupId>com.google.elemental2</groupId>
                 <artifactId>elemental2-dom</artifactId>
                 <version>${elemental.version}</version>
             </dependency>
         </dependencies>
+        
     </dependencyManagement>
     
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>crx-calc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson-provider</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- ========================================================================= -->
+        <!-- UI                                                                        -->
+        <!-- ========================================================================= -->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
@@ -68,6 +174,17 @@
         <dependency>
             <groupId>org.jboss.errai</groupId>
             <artifactId>errai-javaee-all</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.errai</groupId>
+                    <artifactId>errai-jaxrs-provider</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-common</artifactId>
         </dependency>
 
         <dependency>
@@ -82,6 +199,12 @@
         
         <dependency>
             <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-jaxrs-client</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
             <artifactId>errai-jboss-as-support</artifactId>
         </dependency>
 
@@ -92,29 +215,61 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.elemental2</groupId>
             <artifactId>elemental2-dom</artifactId>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- ========================================================================= -->
+        <!-- Arquillian                                                                -->
+        <!-- ========================================================================= -->
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-test-api</artifactId>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>  
+            <groupId>org.jboss.shrinkwrap.descriptors</groupId>  
+            <artifactId>shrinkwrap-descriptors-impl-jboss</artifactId>
+            <scope>test</scope>  
+        </dependency>  
+
+        <!-- 2.1.0.Final fails while parsing the config file -->
+        <dependency>
+            <groupId>org.wildfly.arquillian</groupId>
+            <artifactId>wildfly-arquillian-container-embedded</artifactId>
+            <!-- <artifactId>wildfly-arquillian-container-managed</artifactId> -->
+            <version>2.0.0.Final</version> 
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-  
+    
     <profiles>
         <profile>
             <id>application-server-dist</id>
             <activation>
                 <file>
-                    <missing>${jboss.home}/README.txt</missing>
+                    <missing>dist/wildfly-10.0.0.Final/README.txt</missing>
                 </file>
             </activation>
             
@@ -155,124 +310,317 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>
-  
-    <build>
-        <finalName>${project.artifactId}</finalName>
-        <!--<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>-->
         
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <compilerArguments>
-                        <endorseddirs>${endorsed.dir}</endorseddirs>
-                    </compilerArguments>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
+        <profile>
+            <id>ejb-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>true</skip>
+                                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.3</version>
+                        <executions>
+                            <execution>
+                                <id>default-war</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>war</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>true</skip>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
+                        <version>${gwt.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>compile</goal>
+                                    <goal>test</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                         <configuration>
-                            <outputDirectory>${endorsed.dir}</outputDirectory>
-                            <silent>true</silent>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>javax</groupId>
-                                    <artifactId>javaee-endorsed-api</artifactId>
-                                    <version>7.0</version>
-                                    <type>jar</type>
-                                </artifactItem>
-                            </artifactItems>
+                            <skip>true</skip>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwt.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <!-- 
-                            <goal>test</goal>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.21.0</version>
+                        <executions>
+                            <!--
                             -->
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-                            
-                    <logLevel>INFO</logLevel>
-                    <noServer>false</noServer>
-                    <module>com.crxmarkets.web.Main</module>
+                            <execution>
+                                <id>default-test</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <skipTests>true</skipTests>
+                                </configuration>
+                            </execution>                        
+                            <execution>
+                                <id>arquillian-tests</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Fork every test because it will launch a separate AS instance -->
+                                    <forkCount>2</forkCount>
+                                    <reuseForks>true</reuseForks>
+                                    <systemPropertyVariables>
+                                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                                        <jboss.home>${jboss.home}</jboss.home>
+                                        <module.path>${jboss.home}/modules</module.path>
+                                    </systemPropertyVariables>
+                                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+                
+        <profile>
+            <id>application-server</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+                        
+            <build>
+                <finalName>${project.artifactId}</finalName>
+                
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.21.0</version>
+                        <executions>
+                            <execution>
+                                <id>default-test</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <skipTests>true</skipTests>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     
-                    <extraJvmArgs>-Xmx2048m -XX:CompileThreshold=7000 -Derrai.jboss.home=${jboss.home} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
-                    <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
-                    <disableCastChecking>true</disableCastChecking>
-                    <runTarget>${errai.dev.context}/</runTarget>
-                    <soycDetailed>false</soycDetailed>
-                    <hostedWebapp>src/main/webapp</hostedWebapp>
-                    <strict>true</strict>
-                    <compileReport>true</compileReport>
-                    <saveSource>true</saveSource>                            
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.1</version>
+                        <configuration>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                            <compilerArguments>
+                                <endorseddirs>${endorsed.dir}</endorseddirs>
+                            </compilerArguments>
+                        </configuration>
+                    </plugin>
+                    
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
+                        <version>${gwt.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <module>com.crxmarkets.web.Main</module>
                             
-                    <!--<hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>-->
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-user</artifactId>
-                        <version>${gwt.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-dev</artifactId>
-                        <version>${gwt.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+                            <logLevel>INFO</logLevel>
+                            <style>PRETTY</style>
+
+                            <!--
+                                    <noServer>true</noServer>
+                            -->                    
+                            <noServer>false</noServer>
+                            <extraJvmArgs>-Xmx2048m -XX:CompileThreshold=7000 -Derrai.jboss.home=${jboss.home} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
+                            <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
+                            <runTarget>${errai.dev.context}/</runTarget>
+                            <!--<hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>-->
+                            <hostedWebapp>${project.basedir}/src/main/webapp</hostedWebapp>
+
+                            <disableCastChecking>true</disableCastChecking>
+                            <soycDetailed>false</soycDetailed>
+                            <strict>true</strict>
+                            <compileReport>false</compileReport>
+                            <saveSource>true</saveSource>
+
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.google.gwt</groupId>
+                                <artifactId>gwt-user</artifactId>
+                                <version>${gwt.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.google.gwt</groupId>
+                                <artifactId>gwt-dev</artifactId>
+                                <version>${gwt.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>3.2.1</version>
+                        <configuration>
+                            <packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class</packagingExcludes>
+                            <archive>
+                                <manifestEntries>
+                                    <Dependencies>org.jboss.weld.core,org.jboss.weld.spi,org.slf4j,javax.ws.rs.api,javax.servlet.api,org.jboss.resteasy.resteasy-jaxrs,org.jboss.resteasy.resteasy-jackson-provider</Dependencies>
+                                </manifestEntries>
+                            </archive>
+                            <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+                            <webResources>
+                                <resource>
+                                    <directory>${basedir}/target/extra/app/src</directory>
+                                    <targetPath>src</targetPath>
+                                </resource>
+                                <resource>
+                                    <directory>${basedir}/target/extra/app/symbolMaps</directory>
+                                    <includes>
+                                        <include>*.json</include>
+                                    </includes>
+                                    <targetPath>src</targetPath>
+                                </resource>
+                            </webResources>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                        </configuration>
+                    </plugin>
+
+                    
+                    <!--                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>1.2.1.Final</version>
+                        <configuration>
+                            <jboss-home>${jboss.home}</jboss-home>
+                            <modules-path>${jboss.home}/modules</modules-path>
+                            <port>9990</port>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>undeploy</id>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>undeploy</goal>
+                                </goals>
+                                <configuration>
+                                    <ignoreMissingDeployment>true</ignoreMissingDeployment>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>-->
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.8</version>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${endorsed.dir}</outputDirectory>
+                                    <silent>true</silent>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>javax</groupId>
+                                            <artifactId>javaee-endorsed-api</artifactId>
+                                            <version>7.0</version>
+                                            <type>jar</type>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
             
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>remove-javax</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <tasks>
-                        <delete dir="${project.build.directory}/classes/javax"/>
-                    </tasks>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${basedir}</directory>
+                                    <includes>
+                                        <include>.errai/</include>
+                                        <include>src/main/webapp/app/</include>
+                                        <include>src/main/webapp/WEB-INF/classes/</include>
+                                        <include>src/main/webapp/WEB-INF/deploy/</include>
+                                        <include>src/main/webapp/WEB-INF/lib/</include>
+                                        <include>src/main/gwt-unitCache</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+            
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>remove-javax</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <tasks>
+                                <delete dir="${project.build.directory}/classes/javax"/>
+                            </tasks>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>       
+             
+    </profiles>
+    
 </project>

@@ -53,6 +53,18 @@ public class Lake implements Comparable<Lake> {
         return volume;
     }
 
+    public Integer getLeftBoundary() {
+        return leftBoundary;
+    }
+
+    public Integer getRightBoundary() {
+        return rightBoundary;
+    }
+
+    public Integer getSurface() {
+        return surface;
+    }
+
     @Override
     public String toString() {
         return "L(" + leftBoundary + ':' + rightBoundary + " @ " + surface + ')';
@@ -64,7 +76,7 @@ public class Lake implements Comparable<Lake> {
             return 1;
         }
 
-        // Pliase mind that lakes can not overlap each other
+        // Please mind that lakes can not overlap each other
         return this.rightBoundary.compareTo(other.rightBoundary);
     }
 

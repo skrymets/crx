@@ -10,3 +10,6 @@
 /crx-web/.errai
 /crx-web/src/main/gwt-unitCache
 /crx-web/nb-configuration.xml
+/crx-web/src/main/webapp/WEB-INF/classes
+/crx-web/src/main/webapp/WEB-INF/lib
+/crx-web/src/main/webapp/app

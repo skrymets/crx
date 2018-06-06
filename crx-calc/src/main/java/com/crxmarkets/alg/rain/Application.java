@@ -36,7 +36,7 @@ public class Application {
         List<Lake> lakes = new ArrayList<>();
         LinkedList<List<Peak>> taskQueue = new LinkedList<>();
         taskQueue.add(peaks);
-        (calc).discoverLakes(taskQueue, lakes);
+        calc.discoverLakes(taskQueue, lakes, heights);
 
         System.out.println("peaks: " + peaks.toString());
         System.out.println("lakes: " + lakes.toString());
