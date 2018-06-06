@@ -29,9 +29,6 @@ import java.util.stream.Collectors;
  */
 public class Calculator2 {
 
-    public static void main(String[] args) {
-    }
-
     static List<Peak> filterPeaksByIndexes(List<Peak> peaks, int start, int end) {
         if (peaks == null || peaks.isEmpty() || start > end || start < 0 || end < 0) {
             return Collections.emptyList();
@@ -48,8 +45,12 @@ public class Calculator2 {
         return peak.indexes.get(peak.indexes.size() - 1);
     }
 
-    public void discoverLakes(Deque<List<Peak>> islands, List<Lake> lakesAccumulator) {
+    public void discoverLakes(Deque<List<Peak>> islands, List<Lake> lakesAccumulator, int[] heights) {
 
+        if (heights == null || heights.length == 0) {
+            return;
+        }
+        
         if (islands == null || islands.isEmpty()) {
             return;
         }
@@ -58,48 +59,84 @@ public class Calculator2 {
         if (peaks == null || peaks.size() < 2) {
             // Lakes can exist only between two peaks
             // thus there is no lake in this island
+            discoverLakes(islands, lakesAccumulator, heights);
             return;
         }
         /* -------------------------------------------------------------------------------
          * Overview 
          * -------------------------------------------------------------------------------
          * 1. Find two highest peaks
-         * 2. Create a lake between them
+         * 2. Create a lake between them (see the note below)
          * 3. Remove all the peaks that were sank by this lake from further processing
          *    by processing only leftmost and rightmost remainig parts of the current 
          *    island (including these two highests peaks)
          */
 
         // Step 1. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        List<Peak> sortedPeaks = new ArrayList<>(peaks);
-        Collections.sort(sortedPeaks);
-        Collections.reverse(sortedPeaks); // highest first
+        Peak highestOne = null;
+        Peak highestTwo = null;
+        for (Peak peak : peaks) {
+            if (highestOne == null) {
+                highestOne = peak;
+            } else if (highestTwo == null) {
+                highestTwo = peak;
+            } else if (highestOne.height < peak.height) {
+                highestOne = peak;
+            } else if (highestTwo.height < peak.height) {
+                highestTwo = peak;
+            }
+        }
+
+        if (highestOne == null || highestTwo == null) {
+            throw new IllegalStateException("Algorithm was unable to find highest peaks.");
+        }
 
         // Peaks' indexes (intervals) can't intersect or be coincedent, so it's safe to
         // compare max() of their values
         boolean firstIsLeft
-                = Collections.max(sortedPeaks.get(0).indexes)
-                < Collections.max(sortedPeaks.get(1).indexes);
+                = Collections.max(highestOne.indexes)
+                < Collections.max(highestTwo.indexes);
 
-        Peak leftPeak = (firstIsLeft) ? sortedPeaks.get(0) : sortedPeaks.get(1);
-        Peak rightPeak = (firstIsLeft) ? sortedPeaks.get(1) : sortedPeaks.get(0);
+        Peak leftPeak = (firstIsLeft) ? highestOne : highestTwo;
+        Peak rightPeak = (firstIsLeft) ? highestTwo : highestOne;
 
         // Step 2. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        Lake lake = new Lake(
-                getLastPeakIndex(leftPeak) + 1,
-                rightPeak.indexes.get(0) - 1,
-                Math.min(leftPeak.height, rightPeak.height)
-        );
+        // Important note!
+        // Peak - doesn't mean a "vertical wall". A peak may start from a slope going up, 
+        // and end up with a slope going down. We have to find a point on that slopes 
+        // (if any) that corresponds to the surface level (regarding of which peack is 
+        // the base).
+        int leftShore = getLastPeakIndex(leftPeak);
+        int rightShore = rightPeak.indexes.get(0);
+        int leftBoundary = leftShore + 1;
+        int rightBoundary = rightShore - 1;
+
+        int level = Math.min(leftPeak.height, rightPeak.height);
+        if (leftPeak.height == level) { // Left peak is the base
+            for (int index = rightShore - 1; index > leftShore; index--) {
+                if (heights[index] >= level) rightBoundary = index - 1;
+            }
+        } else {
+            for (int index = leftShore + 1; index < rightShore; index++) {
+                if (heights[index] >= level) leftBoundary = index + 1;
+            }
+        }
+
+        Lake lake = new Lake(leftBoundary, rightBoundary, level);
         lakesAccumulator.add(lake);
 
         // Step 3. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         List<Peak> leftIsland = filterPeaksByIndexes(peaks, 0, leftPeak.indexes.get(0));
-        islands.addLast(leftIsland);
+        if (leftIsland.size() > 1) {
+            islands.addLast(leftIsland);
+        }
 
         List<Peak> rightIsland = filterPeaksByIndexes(peaks, getLastPeakIndex(rightPeak), Integer.MAX_VALUE);
-        islands.addLast(rightIsland);
+        if (rightIsland.size() > 1) {
+            islands.addLast(rightIsland);
+        }
 
-        discoverLakes(islands, lakesAccumulator);
+        discoverLakes(islands, lakesAccumulator, heights);
     }
 
     public List<Peak> discoverPeaks(int[] heights) {
