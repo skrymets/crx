@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import elemental2.dom.CanvasGradient;
 import elemental2.dom.CanvasRenderingContext2D;
 import elemental2.dom.CanvasRenderingContext2D.FillStyleUnionType;
+import elemental2.dom.CanvasRenderingContext2D.StrokeStyleUnionType;
 import elemental2.dom.HTMLCanvasElement;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,9 +115,9 @@ public class CalculatorWidget implements IsElement {
         
         int numberOfHills = heights.size();
         
-        final int sideOffset = 25;
-        final int drawingAreaWidth = canvas.width - (2 * sideOffset);
-        final int drawingAreaHeight = canvas.height - (2 * sideOffset);
+        final double sideOffset = 25.0;
+        final double drawingAreaWidth = canvas.width - (2 * sideOffset);
+        final double drawingAreaHeight = canvas.height - (2 * sideOffset);
         
         double singleHillMaxWidth = drawingAreaWidth / numberOfHills;
         
@@ -125,36 +126,71 @@ public class CalculatorWidget implements IsElement {
         int delta = highestHill + ((lowestHill >= 0) ? 0 : -lowestHill );
         double verticalUnitScaleRatio = drawingAreaHeight / delta;
         
+        double zeroLevel = (highestHill * verticalUnitScaleRatio) + sideOffset;
+        
         List<Rect> hillsRectangles = new ArrayList<>(numberOfHills);
         List<Rect> lakesRectangles = new ArrayList<>(numberOfHills);
-        int index = 0;
-        for (int i = 0; i < heights.size(); i++) {
+        List<Rect> underZeroRectangles = new ArrayList<>(numberOfHills);
+        
+        for (int index = 0; index < heights.size(); index++) {
             
-            int h = heights.get(i);
-            int l = lakes.get(i);
+            int h = heights.get(index);
+            int l = lakes.get(index);
             
             double width = singleHillMaxWidth;
             double left = sideOffset + (index * singleHillMaxWidth);
-            double hillHeight = h * verticalUnitScaleRatio;
-            double lakeHeight = l * verticalUnitScaleRatio;
+            double hillHeight = (h + (lowestHill < 0 ? -lowestHill : 0)) * verticalUnitScaleRatio;
+            double lakeHeight = (l + (lowestHill < 0 ? -lowestHill : 0)) * verticalUnitScaleRatio;
             double hillTop = drawingAreaHeight - hillHeight + sideOffset;
             double lakeTop = drawingAreaHeight - lakeHeight + sideOffset;
             
-            hillsRectangles.add(new Rect(left, hillTop, width, hillHeight));
-            lakesRectangles.add(new Rect(left, lakeTop, width, lakeHeight));
+            hillsRectangles.add(new Rect(left, hillTop, width, hillHeight + 2.0));
+            lakesRectangles.add(new Rect(left, lakeTop, width, lakeHeight + 2.0 ));
             
-            index++;
+            underZeroRectangles.add(new Rect(
+                    left, 
+                    ((h >= 0) ? zeroLevel : hillTop), 
+                    width, 
+                    ((h > 0) ? (hillTop + hillHeight - zeroLevel) : hillHeight) + 2.0)
+            );
         }
         
-        context.fillStyle = FillStyleUnionType.of("#0000FF");
+        context.fillStyle = FillStyleUnionType.of("#026682");
+        context.strokeStyle = StrokeStyleUnionType.of("#026682");
         for (Rect rect : lakesRectangles) {
             context.fillRect(rect.getX(), rect.getY(), rect.getW(), rect.getH());
+            context.strokeRect(rect.getX(), rect.getY(), rect.getW(), rect.getH());
         }
         
-        context.fillStyle = FillStyleUnionType.of("#ffffaa");
+        context.fillStyle = FillStyleUnionType.of("#d8c024");
+        context.strokeStyle = StrokeStyleUnionType.of("#d8c024");
         for (Rect rect : hillsRectangles) {
             context.fillRect(rect.getX(), rect.getY(), rect.getW(), rect.getH());
+            context.strokeRect(rect.getX(), rect.getY(), rect.getW(), rect.getH());
         }
+        
+        context.fillStyle = FillStyleUnionType.of("#7c622c");
+        context.strokeStyle = StrokeStyleUnionType.of("#7c622c");
+        for (Rect rect : underZeroRectangles) {
+            context.fillRect(rect.getX(), rect.getY(), rect.getW(), rect.getH());
+            context.strokeRect(rect.getX(), rect.getY(), rect.getW(), rect.getH());
+        }
+        
+        // Draw Zero Level ---------------------------------------------------------------
+        context.strokeStyle = StrokeStyleUnionType.of("#888888");
+        context.beginPath();
+        for (int i = 0; i <= delta; i++) {
+            double unitLevel = (i * verticalUnitScaleRatio) + sideOffset;
+            context.moveTo(sideOffset, unitLevel);
+            context.lineTo(sideOffset + drawingAreaWidth, unitLevel);
+        }
+        context.stroke();
+        
+        context.strokeStyle = StrokeStyleUnionType.of("#000000");
+        context.beginPath();
+        context.moveTo(sideOffset, zeroLevel);
+        context.lineTo(sideOffset + drawingAreaWidth, zeroLevel);
+        context.stroke();
         
     }
         
@@ -170,7 +206,6 @@ public class CalculatorWidget implements IsElement {
         skyGradient(context);
         drawData(context, hills, lakes);
         
-        // context.strokeStyle = StrokeStyleUnionType.of("#000000");
 
         // Rect rect = new Rect(10.0, 10.0, 240.0, 200.0);
         // context.strokeRect(rect.getX(), rect.getY(), rect.getW(), rect.getH());
