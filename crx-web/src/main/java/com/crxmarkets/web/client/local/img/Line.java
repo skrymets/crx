@@ -13,24 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.web.server;
+package com.crxmarkets.web.client.local.img;
 
-import com.crxmarkets.services.VolumeCalculatorLocalBean;
-import com.crxmarkets.web.client.shared.CalculatorService;
-import javax.ejb.EJB;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+/**
+ *
+ * @author skrymets
+ */
+public class Line {
 
-public class CalculatorServiceImpl implements CalculatorService {
+    private final Point start;
+    private final Point end;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CalculatorServiceImpl.class);
+    public Line(Point start, Point end) {
+        this.start = start;
+        this.end = end;
+    }
 
-    @EJB
-    private VolumeCalculatorLocalBean calculatorBean;
+    public Point getStart() {
+        return start;
+    }
 
-    @Override
-    public String getVersion() {
-        return calculatorBean.getImplementationVersion();
+    public Point getEnd() {
+        return end;
     }
 
 }

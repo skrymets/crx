@@ -13,18 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.services;
-
-import javax.ejb.Local;
+package com.crxmarkets.web.client.local.img;
 
 /**
+ *
  * @author skrymets
  */
-@Local
-public interface VolumeCalculatorLocalBean {
+public class Point {
 
-    int[] calculateWaterLevels(int[] heights);
+    private final double x;
+    private final double y;
 
-    int calculateTotalVolume(int[] heights, int[] levels);
+    public Point(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
 
 }

@@ -13,15 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.web.server;
+package com.crxmarkets.web.client.shared;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
  * @author skrymets
  */
-@ApplicationPath("/rest")
-public class RestServices extends Application {
+@Path("calculator")
+public interface CalculatorResource {
+
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("calculation")
+    public CalculationResult calculate(CalculationTask task);
 
 }

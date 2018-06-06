@@ -15,7 +15,13 @@
  */
 package com.crxmarkets.services;
 
-import java.util.UUID;
+import com.crxmarkets.alg.rain.Calculator2;
+import com.crxmarkets.alg.rain.Lake;
+import com.crxmarkets.alg.rain.Peak;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
@@ -24,13 +30,46 @@ import javax.ejb.Stateless;
 public class VolumeCalculatorBean implements VolumeCalculatorLocalBean {
 
     @Override
-    public String getImplementationVersion() {
-        return UUID.randomUUID().toString();
+    public int[] calculateWaterLevels(int[] heights) {
+
+        if (heights == null || heights.length == 0) {
+            return new int[]{};
+        }
+
+        Calculator2 calc = new Calculator2();
+        List<Peak> peaks = calc.discoverPeaks(heights);
+        List<Lake> lakes = new ArrayList<>();
+        LinkedList<List<Peak>> taskQueue = new LinkedList<>();
+        taskQueue.add(peaks);
+        calc.discoverLakes(taskQueue, lakes);
+
+        int[] levels = Arrays.copyOf(heights, heights.length);
+        for (Lake lake : lakes) {
+            for (int i = lake.getLeftBoundary(); i <= lake.getRightBoundary(); i++) {
+                levels[i] = lake.getSurface();
+            }
+        }
+
+        return levels;
     }
 
     @Override
-    public Long calculateVolume() {
-        return 0L;
+    public int calculateTotalVolume(int[] heights, int[] levels) {
+        if (heights == null
+                || levels == null
+                || heights.length == 0
+                || levels.length == 0
+                || heights.length != levels.length) {
+            return Integer.MIN_VALUE;
+        }
+
+        int totalVolume = 0;
+        for (int i = 0; i < heights.length; i++) {
+            totalVolume += levels[i] - heights[i];
+        }
+
+        return totalVolume;
+
     }
 
 }
