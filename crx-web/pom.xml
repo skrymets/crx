@@ -118,7 +118,6 @@
     </dependencyManagement>
     
     <dependencies>
-        
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>crx-calc</artifactId>
@@ -469,7 +468,8 @@
                             <extraJvmArgs>-Xmx2048m -XX:CompileThreshold=7000 -Derrai.jboss.home=${jboss.home} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
                             <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
                             <runTarget>${errai.dev.context}/</runTarget>
-                            <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
+                            <!--<hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>-->
+                            <hostedWebapp>${project.basedir}/src/main/webapp</hostedWebapp>
 
                             <disableCastChecking>true</disableCastChecking>
                             <soycDetailed>false</soycDetailed>
@@ -589,9 +589,9 @@
                                     <includes>
                                         <include>.errai/</include>
                                         <include>src/main/webapp/app/</include>
-                                        <include>src/main/webapp/WEB-INF/classes</include>
-                                        <include>src/main/webapp/WEB-INF/deploy</include>
-                                        <include>src/main/webapp/WEB-INF/lib</include>
+                                        <include>src/main/webapp/WEB-INF/classes/</include>
+                                        <include>src/main/webapp/WEB-INF/deploy/</include>
+                                        <include>src/main/webapp/WEB-INF/lib/</include>
                                         <include>src/main/gwt-unitCache</include>
                                     </includes>
                                 </fileset>
