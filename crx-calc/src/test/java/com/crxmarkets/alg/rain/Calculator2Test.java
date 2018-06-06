@@ -199,11 +199,11 @@ public class Calculator2Test {
         System.out.println("testDiscoverLakesInvalidInput");
         Calculator2 calc = new Calculator2();
         List<Lake> discoveredLakes = null; // new LinkedList<>();
-        calc.discoverLakes(null, discoveredLakes);
+        calc.discoverLakes(null, discoveredLakes, null);
         assertTrue(true);
 
         discoveredLakes = new LinkedList<>();
-        calc.discoverLakes(null, discoveredLakes);
+        calc.discoverLakes(null, discoveredLakes, null);
         assertNotNull(discoveredLakes);
         assertTrue(discoveredLakes.isEmpty());
     }
@@ -216,7 +216,7 @@ public class Calculator2Test {
 
         Calculator2 calc = new Calculator2();
         List<Peak> peaks = calc.discoverPeaks(heights);
-        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes);
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes, heights);
         assertTrue(discoveredLakes.isEmpty());
     }
 
@@ -230,12 +230,57 @@ public class Calculator2Test {
         List<Peak> peaks = calc.discoverPeaks(heights);
         List<Lake> discoveredLakes = new LinkedList<>();
 
-        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes);
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes, heights);
 
         Collections.sort(discoveredLakes);
         List<Lake> expected = asList(
                 new Lake(1, 2, 3),
                 new Lake(4, 4, 6)
+        );
+
+        String discoveredAsText = discoveredLakes.toString();
+        System.out.println(discoveredAsText);
+        assertEquals(expected.toString(), discoveredAsText);
+    }
+    
+    @Test
+    public void testDiscoverSimpleLakes2() {
+        System.out.println("testDiscoverSimpleLakes2");
+
+        int[] heights = new int[]{5, 7, 3, 7, 3, 4};
+
+        Calculator2 calc = new Calculator2();
+        List<Peak> peaks = calc.discoverPeaks(heights);
+        List<Lake> discoveredLakes = new LinkedList<>();
+
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes, heights);
+
+        Collections.sort(discoveredLakes);
+        List<Lake> expected = asList(
+                new Lake(2, 2, 7),
+                new Lake(4, 4, 4)
+        );
+
+        String discoveredAsText = discoveredLakes.toString();
+        System.out.println(discoveredAsText);
+        assertEquals(expected.toString(), discoveredAsText);
+    }
+    
+    @Test
+    public void testDiscoverSimpleLakes3() {
+        System.out.println("testDiscoverSimpleLakes3");
+
+        int[] heights = new int[]{3, 2, 1, 6, 9}; // With a slope before second peak
+
+        Calculator2 calc = new Calculator2();
+        List<Peak> peaks = calc.discoverPeaks(heights);
+        List<Lake> discoveredLakes = new LinkedList<>();
+
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes, heights);
+
+        Collections.sort(discoveredLakes);
+        List<Lake> expected = asList(
+                new Lake(1, 2, 3)
         );
 
         String discoveredAsText = discoveredLakes.toString();
@@ -251,13 +296,13 @@ public class Calculator2Test {
         Calculator2 calc = new Calculator2();
         List<Peak> peaks = calc.discoverPeaks(slopeDown);
         List<Lake> discoveredLakes = new LinkedList<>();
-        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes);
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes, slopeDown);
         assertTrue(discoveredLakes.isEmpty());
 
         int[] slopeUp = new int[]{0, 1, 2, 3, 4, 5};
         calc = new Calculator2();
         peaks = calc.discoverPeaks(slopeUp);
-        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes);
+        calc.discoverLakes(new LinkedList<>(singletonList(peaks)), discoveredLakes, slopeUp);
         assertTrue(discoveredLakes.isEmpty());
     }
 }
