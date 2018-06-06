@@ -75,14 +75,29 @@ public class Calculator2 {
         // Step 1. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         Peak highestOne = null;
         Peak highestTwo = null;
+        
         for (Peak peak : peaks) {
             if (highestOne == null) {
                 highestOne = peak;
+                continue;
             } else if (highestTwo == null) {
                 highestTwo = peak;
-            } else if (highestOne.height < peak.height) {
-                highestOne = peak;
-            } else if (highestTwo.height < peak.height) {
+                continue;
+            } 
+            
+            boolean higherThanFirst = (highestOne.height < peak.height);
+            boolean higherThanSecond = (highestTwo.height < peak.height);
+            
+            if (higherThanFirst) {
+                if (highestOne.height >= highestTwo.height) {
+                    highestTwo = peak;
+                } else {
+                    highestOne = peak;
+                }
+                continue;
+            }
+            
+            if (higherThanSecond) {
                 highestTwo = peak;
             }
         }
