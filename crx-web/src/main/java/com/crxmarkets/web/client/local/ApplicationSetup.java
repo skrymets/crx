@@ -17,14 +17,11 @@ package com.crxmarkets.web.client.local;
 
 import com.crxmarkets.web.client.local.JQueryProducer.JQuery;
 import com.google.gwt.user.client.ui.RootPanel;
-import elemental2.dom.HTMLDivElement;
 import elemental2.dom.HTMLDocument;
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ui.nav.client.local.NavigationPanel;
-import org.jboss.errai.ui.shared.api.annotations.DataField;
 
 /**
  *
@@ -34,10 +31,10 @@ import org.jboss.errai.ui.shared.api.annotations.DataField;
 public class ApplicationSetup {
 
     @Inject
-    NavBar navBar;
+    private NavigationPanel navPanel;
 
     @Inject
-    Instance<CalculatorWidget> calculatorWidget;
+    NavBar navbar;
 
     @Inject
     private JQuery $;
@@ -46,8 +43,8 @@ public class ApplicationSetup {
     private HTMLDocument document;
 
     @PostConstruct
-    public void init() {
-        $.wrap($.wrap(document.body).children().first()).after(navBar.getElement());
-        $.wrap($.wrap(document.body).children().first()).after(calculatorWidget.get().getElement());
+    public void setup() {
+        RootPanel.get("rootPanel").add(navPanel);
+        $.wrap($.wrap(document.body).children().first()).before(navbar.getElement());
     }
 }
