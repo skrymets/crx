@@ -15,9 +15,13 @@
  */
 package com.crxmarkets.web.client.shared;
 
+import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -32,5 +36,25 @@ public interface CalculatorResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Path("task")
     public CalculationResult calculate(CalculationTask task);
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("history")
+    public List<HistoryItem> getCalculatorHistory();
+
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("history")
+    public int cleanupCalculatorHistory();
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("history/{itemId:[0-9]+}")
+    public HistoryItem getHistoryItem(@PathParam("itemId") long id);
+
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("history/{itemId:[0-9]+}")
+    public boolean deleteHistoryItem(@PathParam("itemId") long id);
 
 }

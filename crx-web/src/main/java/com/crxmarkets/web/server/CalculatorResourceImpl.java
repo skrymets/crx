@@ -15,14 +15,19 @@
  */
 package com.crxmarkets.web.server;
 
-import com.crxmarkets.services.VolumeCalculatorLocalBean;
+import com.crxmarkets.services.HistoryEntityServiceLocal;
+import com.crxmarkets.services.VolumeCalculatorServiceLocal;
 import com.crxmarkets.web.client.shared.CalculationResult;
 import com.crxmarkets.web.client.shared.CalculationTask;
 import com.crxmarkets.web.client.shared.CalculatorResource;
+import com.crxmarkets.web.client.shared.HistoryItem;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,22 +36,25 @@ public class CalculatorResourceImpl implements CalculatorResource {
     private static final Logger LOG = LoggerFactory.getLogger(CalculatorResource.class);
 
     @EJB
-    private VolumeCalculatorLocalBean calculatorBean;
+    private VolumeCalculatorServiceLocal calculatorService;
+
+    @EJB
+    private HistoryEntityServiceLocal historyEntityService;
 
     @Override
     public CalculationResult calculate(CalculationTask task) {
-        
+
         if (task == null || task.getHeights() == null || task.getHeights().size() < 3) {
             throw new BadRequestException("Task data is incomplete.");
         }
-        
+
         int[] h = new int[task.getHeights().size()];
         for (int i = 0; i < h.length; i++) {
             h[i] = task.getHeights().get(i);
         }
 
-        int[] waterLevels = calculatorBean.calculateWaterLevels(h);
-        int totalVolume = calculatorBean.calculateTotalVolume(h, waterLevels);
+        int[] waterLevels = calculatorService.calculateWaterLevels(h);
+        int totalVolume = calculatorService.calculateTotalVolume(h, waterLevels);
 
         CalculationResult result = new CalculationResult();
 
@@ -54,12 +62,47 @@ public class CalculatorResourceImpl implements CalculatorResource {
         for (int i : waterLevels) {
             waterLevelsList.add(i);
         }
-        
+
         result.setInput(task.getHeights());
         result.setLevels(waterLevelsList);
         result.setTotalVolume(totalVolume);
 
+        saveForHistory(totalVolume, task.getHeights(), waterLevelsList);
+
         return result;
+    }
+
+    protected void saveForHistory(int totalVolume, List<Integer> heights, List<Integer> levels) {
+        HistoryItem hi = new HistoryItem();
+        hi.setDateTime(new Date());
+        hi.setTotal(totalVolume);
+        hi.setTask(heights.stream().map(String::valueOf).collect(Collectors.joining(" ")));
+        hi.setCalculation(levels.stream().map(String::valueOf).collect(Collectors.joining(" ")));
+        historyEntityService.create(hi);
+    }
+
+    @Override
+    public List<HistoryItem> getCalculatorHistory() {
+        return historyEntityService.getFullHistory();
+    }
+
+    @Override
+    public int cleanupCalculatorHistory() {
+        return historyEntityService.clearHistory();
+    }
+
+    @Override
+    public HistoryItem getHistoryItem(long id) {
+        HistoryItem item = historyEntityService.find(id);
+        if (item == null) {
+            throw new NotFoundException();
+        }
+        return item;
+    }
+
+    @Override
+    public boolean deleteHistoryItem(long id) {
+        return historyEntityService.delete(id);
     }
 
 }
