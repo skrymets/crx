@@ -34,8 +34,8 @@ import org.jboss.errai.databinding.client.api.Bindable;
 @Portable
 @Bindable
 @NamedQueries({
-    @NamedQuery(name = HistoryItem.ALL_HISTORY_QUERY, query = "SELECT h FROM HistoryItem h ORDER BY h.id"),
-    @NamedQuery(name = HistoryItem.CLEAN_HISTORY_QUERY, query = "DELETE FROM HistoryItem")
+    @NamedQuery(name = HistoryItem.ALL_HISTORY_QUERY, query = "SELECT h FROM HistoryItem h ORDER BY h.id")
+        // , @NamedQuery(name = HistoryItem.CLEAN_HISTORY_QUERY, query = "DELETE FROM HistoryItem")
 })
 public class HistoryItem implements Serializable {
 
