@@ -58,7 +58,7 @@ import static elemental2.dom.DomGlobal.document;
  * bean, or by programmatic lookup through the bean manager.
  */
 @ApplicationScoped
-@Templated("templates.html#navbar")
+@Templated("calculator-page.html#navbar")
 public class NavBar implements IsElement {
 
     @Inject

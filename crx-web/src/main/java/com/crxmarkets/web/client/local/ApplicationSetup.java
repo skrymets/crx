@@ -22,6 +22,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ui.nav.client.local.NavigationPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -29,6 +31,8 @@ import org.jboss.errai.ui.nav.client.local.NavigationPanel;
  */
 @EntryPoint
 public class ApplicationSetup {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EntryPoint.class);
 
     @Inject
     private NavigationPanel navPanel;
@@ -46,5 +50,7 @@ public class ApplicationSetup {
     public void setup() {
         RootPanel.get("rootPanel").add(navPanel);
         $.wrap($.wrap(document.body).children().first()).before(navbar.getElement());
+
+        LOG.info("Application Main has been created");
     }
 }
