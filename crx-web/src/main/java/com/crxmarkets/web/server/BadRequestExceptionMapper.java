@@ -36,6 +36,7 @@ public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestExce
         LOG.error(exception.getMessage(), exception);
         return Response
                 .status(Response.Status.BAD_REQUEST)
+                .entity(exception.getMessage())
                 .build();
     }
 

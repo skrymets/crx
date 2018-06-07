@@ -20,9 +20,13 @@ import com.crxmarkets.web.client.shared.CalculationResult;
 import com.crxmarkets.web.client.shared.CalculationTask;
 import com.crxmarkets.web.client.shared.CalculatorResource;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
+import elemental2.dom.CSSProperties;
+import elemental2.dom.CSSProperties.WidthUnionType;
 import elemental2.dom.CanvasGradient;
 import elemental2.dom.CanvasRenderingContext2D;
 import elemental2.dom.CanvasRenderingContext2D.FillStyleUnionType;
@@ -36,12 +40,16 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jboss.errai.enterprise.client.jaxrs.api.RestErrorCallback;
 import org.jboss.errai.ui.client.local.api.elemental2.IsElement;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.ForEvent;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -50,15 +58,13 @@ import org.jboss.errai.ui.shared.api.annotations.Templated;
 @Templated("calculator-page.html#calculator-widget")
 public class CalculatorWidget implements IsElement {
 
-    // static final int height = 400;
-    // static final int width = 500;
-
+    private static final Logger LOG = LoggerFactory.getLogger(CalculatorWidget.class);
 
     @Inject
     Caller<CalculatorResource> calculatorResource;
 
     @Inject
-    @DataField
+    @DataField("task-data")
     TextBox rawTaskData;
     
     @Inject
@@ -72,10 +78,13 @@ public class CalculatorWidget implements IsElement {
     @Inject
     @DataField
     Button calculateButton;
-
+    
     @Inject
     @DataField("calculator-screen")
     HTMLCanvasElement canvas;
+    
+    @Inject
+    JQueryProducer.JQuery $;
      
     @EventHandler("calculateButton")
     public void onCalculateClick(final @ForEvent("click") ClickEvent event) {
@@ -84,17 +93,23 @@ public class CalculatorWidget implements IsElement {
         String[] numbersString = taskString.split(" ");
         final List<Integer> hills = Stream.of(numbersString).map(Integer::valueOf).collect(Collectors.toList());
         
-        // hills = Arrays.asList(3, 2, 1, 0, 0, 2, 1, 0, 2);
-        
-        RemoteCallback<CalculationResult> callback = (CalculationResult response) -> {
+        RemoteCallback<CalculationResult> responseCallback = (response) -> {
             calculationResultData.setText(response.toString());
             draw(hills, response.getLevels());
+        };
+        
+        ErrorCallback errorCallback = (RestErrorCallback) (Request message, Throwable throwable) -> {
+            if (throwable != null) {
+                String details = throwable.getMessage();
+                Window.alert(details);
+            }
+            return false;
         };
 
         CalculationTask task = new CalculationTask();
         task.setHeights(hills);
         calculationData.setText(hills.toString());
-        calculatorResource.call(callback).calculate(task);
+        calculatorResource.call(responseCallback, errorCallback).calculate(task);
 
     }
 
@@ -192,13 +207,18 @@ public class CalculatorWidget implements IsElement {
         context.lineTo(sideOffset + drawingAreaWidth, zeroLevel);
         context.stroke();
         
+        context.fillText(String.valueOf(canvas.width), 30, 30);
+        context.fillText(String.valueOf(canvas.height), 30, 60);
+        
     }
         
     private void draw(List<Integer> hills, List<Integer> lakes) {
         
         final CanvasRenderingContext2D context = (CanvasRenderingContext2D) (Object) canvas.getContext("2d");
         
-        canvas.width = 600;
+        canvas.style.width = WidthUnionType.of("100%");
+        
+        canvas.width = canvas.offsetWidth;
         canvas.height = 400;
         
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -214,7 +234,7 @@ public class CalculatorWidget implements IsElement {
     
     @PostConstruct
     public void init() {
-
+        LOG.info("Calculator Widget instance has been created");
     }
 
 }

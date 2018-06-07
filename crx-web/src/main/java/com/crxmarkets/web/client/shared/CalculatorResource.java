@@ -30,7 +30,7 @@ public interface CalculatorResource {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("calculation")
+    @Path("task")
     public CalculationResult calculate(CalculationTask task);
 
 }

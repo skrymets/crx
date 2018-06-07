@@ -15,14 +15,15 @@
  */
 package com.crxmarkets.web.client.local;
 
-import com.crxmarkets.web.client.local.JQueryProducer.JQuery;
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import org.jboss.errai.ui.client.local.api.elemental2.IsElement;
 import org.jboss.errai.ui.nav.client.local.DefaultPage;
 import org.jboss.errai.ui.nav.client.local.Page;
+import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -31,16 +32,16 @@ import org.jboss.errai.ui.shared.api.annotations.Templated;
 @Page(role = DefaultPage.class, path = "/calculator")
 @Templated(value = "calculator-page.html#default-page-content", stylesheet = "calculator-page.css")
 public class CalculatorPage implements IsElement {
-
-    @Inject
-    Instance<CalculatorWidget> calculatorWidget;
-
-    @Inject
-    JQuery $;
     
+    private static final Logger LOG = LoggerFactory.getLogger(CalculatorPage.class);
+
+    @Inject
+    @DataField("calculator-instance")        
+    CalculatorWidget calculatorWidget;
+
     @PostConstruct
     public void setup() {
-        $.wrap(getElement()).children().first().after(calculatorWidget.get().getElement());
+        LOG.info("Default page instance {} has been created.", CalculatorPage.class.getName());
     }
 
 }
