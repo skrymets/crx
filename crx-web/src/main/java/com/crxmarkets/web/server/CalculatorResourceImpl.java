@@ -22,8 +22,7 @@ import com.crxmarkets.web.client.shared.CalculatorResource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +34,10 @@ public class CalculatorResourceImpl implements CalculatorResource {
     private VolumeCalculatorLocalBean calculatorBean;
 
     @Override
-    public Response calculate(CalculationTask task) {
+    public CalculationResult calculate(CalculationTask task) {
         
         if (task == null || task.getHeights() == null || task.getHeights().size() < 3) {
-            return Response.status(Status.BAD_REQUEST).entity("Task data is incomplete.") .build();
+            throw new BadRequestException("Task data is incomplete.");
         }
         
         int[] h = new int[task.getHeights().size()];
@@ -60,7 +59,7 @@ public class CalculatorResourceImpl implements CalculatorResource {
         result.setLevels(waterLevelsList);
         result.setTotalVolume(totalVolume);
 
-        return Response.ok(result).build();
+        return result;
     }
 
 }
