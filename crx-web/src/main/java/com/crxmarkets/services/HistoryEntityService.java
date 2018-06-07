@@ -73,7 +73,12 @@ public class HistoryEntityService implements HistoryEntityServiceLocal {
 
     @Override
     public int clearHistory() {
-        return em.createNamedQuery(HistoryItem.CLEAN_HISTORY_QUERY, HistoryItem.class).executeUpdate();
+
+        List<HistoryItem> items = getFullHistory();
+        for (HistoryItem item : items) {
+            em.remove(item);
+        }
+        return items.size();
     }
 
 }
