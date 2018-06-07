@@ -21,7 +21,7 @@ import javax.ejb.Local;
  * @author skrymets
  */
 @Local
-public interface VolumeCalculatorLocalBean {
+public interface VolumeCalculatorServiceLocal {
 
     int[] calculateWaterLevels(int[] heights);
 

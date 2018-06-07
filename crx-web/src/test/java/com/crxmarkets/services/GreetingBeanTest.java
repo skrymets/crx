@@ -47,7 +47,7 @@ public class GreetingBeanTest {
         JavaArchive jar = ShrinkWrap
                 .create(JavaArchive.class, "crx-test.jar")
                 .addClasses(
-                        VolumeCalculatorBean.class
+                        VolumeCalculatorService.class
                 // MessageProviderBean.class,
                 // TemplateType.class
                 )
@@ -60,7 +60,7 @@ public class GreetingBeanTest {
 
     // @Inject
     @EJB
-    VolumeCalculatorBean bean;
+    VolumeCalculatorService bean;
 
     @Test
     public void startAndHealthCheck() {
