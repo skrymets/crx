@@ -113,6 +113,11 @@
                 <artifactId>elemental2-dom</artifactId>
                 <version>${elemental.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.elemental2</groupId>
+                <artifactId>elemental2-core</artifactId>
+                <version>${elemental.version}</version>
+            </dependency>
         </dependencies>
         
     </dependencyManagement>
@@ -129,7 +134,7 @@
             <scope>compile</scope>
             <type>jar</type>
         </dependency>
-
+        
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -217,6 +222,12 @@
         <dependency>
             <groupId>com.google.elemental2</groupId>
             <artifactId>elemental2-dom</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-core</artifactId>
             <scope>provided</scope>
         </dependency>
         
