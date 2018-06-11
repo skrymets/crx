@@ -13,7 +13,8 @@
         <title>Rain Volume Calculator</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/default.css">
 
         <script type="text/javascript" src="<%=contextPath%>/app/app.nocache.js"></script>
 

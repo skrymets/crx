@@ -27,7 +27,7 @@ import javax.ejb.Stateless;
 
 @Stateless
 @Local
-public class VolumeCalculatorBean implements VolumeCalculatorLocalBean {
+public class VolumeCalculatorService implements VolumeCalculatorServiceLocal {
 
     @Override
     public int[] calculateWaterLevels(int[] heights) {
