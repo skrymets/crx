@@ -84,12 +84,11 @@ public class HistoryListPage {
     public void setup() {
         populateHistoryList();
 
-//        historyList.setSelector(display -> display.setSelected(true));
-//        historyList.setDeselector(display -> display.setSelected(false));
         buttonCleanupHistory.addClickHandler((ClickEvent event) -> {
             calculatorResource.call(
                     (Integer response) -> {
                         Window.alert("History is clear. Number of deleted items: " + String.valueOf(response));
+                        binder.getModel().clear();
                         populateHistoryList();
                     },
                     (RestErrorCallback) (Request message, Throwable throwable) -> {
@@ -113,6 +112,7 @@ public class HistoryListPage {
 
     protected void populateHistoryList() {
         DOMUtil.removeAllElementChildren(historyList.getElement());
+        binder.getModel().clear();
         calculatorService
                 .call((final List<HistoryItem> his) -> binder.getModel().addAll(his))
                 .getCalculatorHistory();
