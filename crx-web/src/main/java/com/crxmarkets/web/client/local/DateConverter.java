@@ -37,7 +37,7 @@ public class DateConverter implements Converter<Date, String> {
             return "";
         } else {
             final elemental2.core.JsDate jsDate = new elemental2.core.JsDate(((Long) modelValue.getTime()).doubleValue());
-            return jsDate.toISOString().substring(0, 10);
+            return jsDate.toLocaleString();
         }
     }
 
