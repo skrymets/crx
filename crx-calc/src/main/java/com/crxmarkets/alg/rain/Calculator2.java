@@ -50,7 +50,7 @@ public class Calculator2 {
         if (heights == null || heights.length == 0) {
             return;
         }
-        
+
         if (islands == null || islands.isEmpty()) {
             return;
         }
@@ -75,7 +75,7 @@ public class Calculator2 {
         // Step 1. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         Peak highestOne = null;
         Peak highestTwo = null;
-        
+
         for (Peak peak : peaks) {
             if (highestOne == null) {
                 highestOne = peak;
@@ -83,11 +83,11 @@ public class Calculator2 {
             } else if (highestTwo == null) {
                 highestTwo = peak;
                 continue;
-            } 
-            
+            }
+
             boolean higherThanFirst = (highestOne.height < peak.height);
             boolean higherThanSecond = (highestTwo.height < peak.height);
-            
+
             if (higherThanFirst) {
                 if (highestOne.height >= highestTwo.height) {
                     highestTwo = peak;
@@ -96,7 +96,7 @@ public class Calculator2 {
                 }
                 continue;
             }
-            
+
             if (higherThanSecond) {
                 highestTwo = peak;
             }
@@ -129,11 +129,19 @@ public class Calculator2 {
         int level = Math.min(leftPeak.height, rightPeak.height);
         if (leftPeak.height == level) { // Left peak is the base
             for (int index = rightShore - 1; index > leftShore; index--) {
-                if (heights[index] >= level) rightBoundary = index - 1;
+                if (heights[index] >= level) {
+                    rightBoundary = index - 1;
+                } else {
+                    break;
+                }
             }
         } else {
             for (int index = leftShore + 1; index < rightShore; index++) {
-                if (heights[index] >= level) leftBoundary = index + 1;
+                if (heights[index] >= level) {
+                    leftBoundary = index + 1;
+                } else {
+                    break;
+                }
             }
         }
 

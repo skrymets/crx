@@ -32,6 +32,74 @@ public class IssuesTest {
     public IssuesTest() {
     }
 
+    /**
+     * Failed: -1 -2 -1 -2 1 -2 -1
+     */
+    @Test
+    public void testIssue9InvalidLakesSelectionNegativeSawPeaks() {
+        System.out.println("testIssue9InvalidLakesSelectionNegativeSawPeaks");
+        int[] heights = new int[]{-1, -2, -1, -2, -1, -2, -1};
+        final Calculator2 calc = new Calculator2();
+        List<Peak> discoverPeaks = calc.discoverPeaks(heights);
+        assertEquals(4, discoverPeaks.size());
+
+        List<Peak> expectedPeaks = asList(
+                new Peak(asList(new Integer[]{0}), -1),
+                new Peak(asList(new Integer[]{2}), -1),
+                new Peak(asList(new Integer[]{4}), -1),
+                new Peak(asList(new Integer[]{6}), -1)
+        );
+
+        String discoveredAsText = discoverPeaks.toString();
+        System.out.println(discoveredAsText);
+        assertEquals(expectedPeaks.toString(), discoveredAsText);
+
+        List<Lake> discoveredLakes = new LinkedList<>();
+        calc.discoverLakes(new LinkedList<>(singletonList(discoverPeaks)), discoveredLakes, heights);
+
+        Collections.sort(discoveredLakes);
+        List<Lake> expectedLakes = asList(
+                new Lake(1, 1, -1),
+                new Lake(3, 3, -1),
+                new Lake(5, 5, -1)
+        );
+
+        discoveredAsText = discoveredLakes.toString();
+        System.out.println(discoveredAsText);
+        assertEquals(expectedLakes.toString(), discoveredAsText);
+    }
+    
+    @Test
+    public void testIssue9InvalidLakesSelectionNegativeSawPeaks2() {
+        System.out.println("testIssue9InvalidLakesSelectionNegativeSawPeaks2");
+        int[] heights = new int[]{-1, -2, -1, -2, -1, -2, 0};
+        final Calculator2 calc = new Calculator2();
+        List<Peak> discoverPeaks = calc.discoverPeaks(heights);
+        assertEquals(4, discoverPeaks.size());
+
+        List<Peak> expectedPeaks = asList(
+                new Peak(asList(new Integer[]{0}), -1),
+                new Peak(asList(new Integer[]{2}), -1),
+                new Peak(asList(new Integer[]{4}), -1),
+                new Peak(asList(new Integer[]{6}), 0)
+        );
+
+        String discoveredAsText = discoverPeaks.toString();
+        System.out.println(discoveredAsText);
+        assertEquals(expectedPeaks.toString(), discoveredAsText);
+
+        List<Lake> discoveredLakes = new LinkedList<>();
+        calc.discoverLakes(new LinkedList<>(singletonList(discoverPeaks)), discoveredLakes, heights);
+
+        Collections.sort(discoveredLakes);
+        List<Lake> expectedLakes = asList(
+                new Lake(1, 5, -1)
+        );
+
+        discoveredAsText = discoveredLakes.toString();
+        System.out.println(discoveredAsText);
+        assertEquals(expectedLakes.toString(), discoveredAsText);
+    }
 
     @Test
     public void testIssueBetweenToSidePeaks() {
@@ -46,11 +114,10 @@ public class IssuesTest {
                 new Peak(asList(new Integer[]{3}), 3),
                 new Peak(asList(new Integer[]{6}), 5)
         );
-        
+
         String discoveredAsText = discoverPeaks.toString();
         System.out.println(discoveredAsText);
         assertEquals(expectedPeaks.toString(), discoveredAsText);
-        
 
         List<Lake> discoveredLakes = new LinkedList<>();
         calc.discoverLakes(new LinkedList<>(singletonList(discoverPeaks)), discoveredLakes, heights);
