@@ -18,43 +18,110 @@ limitations under the License.
     Author     : skrymets
 */
 
-.header {
-    text-align: center;
-    background-color: #352F3C;
-    color: rgb(220,220,220);
-    padding: 0;
-    font-size: 20px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
-
-#default-page-content {
-    padding-top: 60px;
+.app-page-content {
+    padding-top: 100px;
 }
 
 .calculator-screen {
     height: 400px;
+    padding-bottom: 20px;
 }
 
 /* ------------------------------------------------------------------ */
+#history-controls {
+    margin-bottom: 20px;
+}
 
 /* ------------------------------------------------------------------ */
 .history-item {
+    cursor: pointer;
+}
+
+.history-item label {
+    padding-left: 40px;
+}
+
+.history-item {
+    border-top: 1px solid #0066cc;
+    background: #FFFFFF;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 10pt;
+    font-family: inherit;
+}
+
+.history-item.selected {
+    background-color: #9999ff;
+}
+
+.hi-calculator-task {
 
 }
 
-.calculator-task {
+.hi-calculated-levels {
 
 }
 
-.calculated-levels {
+.hi-total-volume {
 
 }
 
-.total-volume {
+.hi-task-date {
 
 }
 
-.task-date {
+.modal-calculation-result {
+    font-size: 20pt;
+    font-weight: bold;
+    color: #286090;
+};
 
+.modal-result-label {
+    font-size: 17pt;
+    font-weight: bold;
+    text-align: right;
+    color: #000000;
 }
+
+
+.modal.container {
+    max-height: 90%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #777984;
+    border-radius: 2px;
+}
+
+.modal.container > .row {
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.modal {
+    display: block;
+    height: auto;
+    position: fixed;
+    z-index: 2000;
+    top: -150%;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    transition: top 1s;
+}
+
+.modal.displayed {
+    top: 70px;
+}
+
+.modal-button {
+    position: relative;
+    height: 30px;
+    border: 0;
+    font-family: inherit;
+    font-size: 14pt;
+    padding-bottom: 33px;
+}
+

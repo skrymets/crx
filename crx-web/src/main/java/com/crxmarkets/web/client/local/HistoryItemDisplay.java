@@ -16,7 +16,6 @@
 package com.crxmarkets.web.client.local;
 
 import elemental2.dom.HTMLDivElement;
-import elemental2.dom.HTMLHeadingElement;
 import elemental2.dom.MouseEvent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -36,17 +35,22 @@ public class HistoryItemDisplay extends BaseHistoryItemView implements IsElement
 
     @Inject
     @Bound(property = "task")
-    @DataField("calculator-task")
+    @DataField("hi-calculator-task")
     private HTMLDivElement taskData;
 
     @Inject
+    @Bound(property = "total")
+    @DataField("hi-total-volume")
+    private HTMLDivElement totalVolume;
+
+    @Inject
     @Bound(property = "calculation")
-    @DataField("calculated-levels")
+    @DataField("hi-calculated-levels")
     private HTMLDivElement calculatedLevels;
 
     @Inject
     @Bound(converter = DateConverter.class, property = "dateTime")
-    @DataField("task-date")
+    @DataField("hi-task-date")
     private HTMLDivElement taskDate;
 
     @Inject
@@ -57,12 +61,12 @@ public class HistoryItemDisplay extends BaseHistoryItemView implements IsElement
         click.fire(this);
     }
 
-    public void setSelected(final boolean selected) {
-        if (selected) {
-            historyItem.classList.remove("selected");
-        } else {
-            historyItem.classList.add("selected");
-        }
-    }
+//    public void setSelected(final boolean selected) {
+//        if (selected) {
+//            historyItem.classList.remove("selected");
+//        } else {
+//            historyItem.classList.add("selected");
+//        }
+//    }
 
 }

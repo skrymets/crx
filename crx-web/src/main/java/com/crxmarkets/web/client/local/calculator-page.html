@@ -17,59 +17,107 @@ limitations under the License.
 <html>
     <head>
         <link rel="stylesheet" href="../../../../../../webapp/css/bootstrap.min.css" type="text/css"/>
-        <link rel="stylesheet" type="text/css" href="calculator-page.css">
+        <link rel="stylesheet" type="text/css" href="../../../../../../webapp/css/default.css">
+        <link rel="stylesheet" href="calculator-page.css" type="text/css"/>
+
+
         <title>Calculator</title>
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
 
-        <nav data-field="navbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <nav id="navbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+                    <a class="navbar-brand calc-title" href="#">Volume Calculator</a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul data-field="navlist" class="nav navbar-nav">
+                        <li><a data-field="calculator" href="#/calculator">Calculator</a>
+                        <li><a data-field="history" href="#/history">History</a>
                     </ul>
                 </div>
             </div>
         </nav>
 
-        <div id="default-page-content" class="row">
-            <div data-field="calculator-instance"></div>
+        <div id="default-page-content" class="container app-page-content">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <div class="input-group-addon">heights: </div>
+                        <input data-field="heights-input" class="form-control" type="text" placeholder="3 2 -1 2 4" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button id="calculate-button" class="btn btn-primary btn-block">Calculate</button>
+                </div>
+            </div>
+
+            <div class="modal container modal-calculator-widget">
+            </div>
+
         </div>
 
-
-        <div id="history-page-content" class="row">
-            <div class="container">
-                <div id="history-list" class="row">
+        <div id="calculator-widget" class="row">
+            <div data-field="modal-screen-container" class="row">
+                <canvas data-field="calculator-screen" class="col-md-12 calculator-screen"></canvas>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <span class="modal-result-label">Volume (units): </span>
+                </div>
+                <div class="col-md-8">
+                    <div class="modal-calculation-result"></div>
+                </div>
+                <div class="col-md-2">
+                    <button id="modal-close-button" class="btn btn-block">Close</button>
                 </div>
             </div>
         </div>
 
-
-        <div id="calculator-widget" class="row col-md-12">
-            <canvas data-field="calculator-screen" class="col-md-12 calculator-screen"></canvas>
-            <input data-field="task-data" type="text" />
-            <div data-field="calculationData"></div>
-            <div data-field="calculationResultData"></div>
-            <button id="calculateButton">Calculate</button>
+        <div id="history-page-content" class="row app-page-content">
+            <div class="modal container modal-calculator-widget">
+            </div>
+            
+            <div class="container">
+                <div id="history-controls" class="row">
+                    <div class="col-md-9">
+                    </div>
+                    <div class="col-md-3">
+                        <button data-field="button-cleanup-history" class="btn btn-primary btn-block">Erase History</button>
+                    </div>
+                </div>
+                <div id="history-list" class="container row">
+                </div>
+            </div>
         </div>
 
         <div data-field="history-item" class="history-item">
-            <div class="caption">
-                <div class="calculator-task" title="Heights"></div>
-                <div class="calculated-levels" title="Levels"></div>
-                <div class="total-volume" title="Volume"></div>
-                <div class="task-date" title="Calculation Date"></div>
+            <div class="row">
+                <label class="col-md-2">Date:</label>
+                <div class="hi-task-date col-md-10" title="Calculation Date"></div>
+            </div>
+            <div class="row">
+                <label class="col-md-2">Volume: </label>
+                <div class="hi-total-volume col-md-10" title="Volume"></div>
+            </div>
+            <div class="row">
+                <label class="col-md-2">Input: </label>
+                <div class="hi-calculator-task col-md-10" title="Heights"></div>
+            </div>
+            <div class="row">
+                <label class="col-md-2">Levels: </label>
+                <div class="hi-calculated-levels col-md-10" title="Levels"></div>
             </div>
         </div>
 
