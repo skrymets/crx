@@ -37,6 +37,12 @@ public interface CalculatorResource {
     @Path("task")
     public CalculationResult calculate(CalculationTask task);
 
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("history")
+    public long saveInHistory(HistoryItem historyItem);
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("history")

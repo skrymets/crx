@@ -22,9 +22,7 @@ import com.crxmarkets.web.client.shared.CalculationTask;
 import com.crxmarkets.web.client.shared.CalculatorResource;
 import com.crxmarkets.web.client.shared.HistoryItem;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -67,18 +65,13 @@ public class CalculatorResourceImpl implements CalculatorResource {
         result.setLevels(waterLevelsList);
         result.setTotalVolume(totalVolume);
 
-        saveForHistory(totalVolume, task.getHeights(), waterLevelsList);
-
         return result;
     }
 
-    protected void saveForHistory(int totalVolume, List<Integer> heights, List<Integer> levels) {
-        HistoryItem hi = new HistoryItem();
-        hi.setDateTime(new Date());
-        hi.setTotal(totalVolume);
-        hi.setTask(heights.stream().map(String::valueOf).collect(Collectors.joining(" ")));
-        hi.setCalculation(levels.stream().map(String::valueOf).collect(Collectors.joining(" ")));
-        historyEntityService.create(hi);
+    @Override
+    public long saveInHistory(HistoryItem historyItem) {
+        historyEntityService.create(historyItem);
+        return historyItem.getId();
     }
 
     @Override
