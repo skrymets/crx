@@ -476,7 +476,7 @@
                                     <noServer>true</noServer>
                             -->                    
                             <noServer>false</noServer>
-                            <extraJvmArgs>-Xmx2048m -XX:CompileThreshold=7000 -Derrai.jboss.home=${jboss.home} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
+                            <extraJvmArgs>-Xmx4096m -XX:CompileThreshold=7000 -Derrai.jboss.home=${jboss.home} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
                             <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
                             <runTarget>${errai.dev.context}/</runTarget>
                             <!--<hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>-->
