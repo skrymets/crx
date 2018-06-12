@@ -13,31 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.web.client.local.img;
+package com.crxmarkets.web.client.local.graphics;
 
 /**
  *
  * @author skrymets
  */
-public class Rect {
+public class Point {
 
     private final double x;
     private final double y;
-    private final double w;
-    private final double h;
 
-    public Rect(Point origin, double w, double h) {
-        this.x = origin.getX();
-        this.y = origin.getY();
-        this.w = w;
-        this.h = h;
-    }
-
-    public Rect(double x, double y, double w, double h) {
+    public Point(double x, double y) {
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
     }
 
     public double getX() {
@@ -46,14 +35,6 @@ public class Rect {
 
     public double getY() {
         return y;
-    }
-
-    public double getW() {
-        return w;
-    }
-
-    public double getH() {
-        return h;
     }
 
 }

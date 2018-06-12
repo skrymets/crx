@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.web.server;
+package com.crxmarkets.api;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Response;

@@ -15,22 +15,25 @@
  */
 package com.crxmarkets.web.client.local;
 
+import com.crxmarkets.web.client.local.CalcWidgetEvent.Type;
 import com.crxmarkets.web.client.shared.CalculationResult;
 import com.crxmarkets.web.client.shared.CalculationTask;
 import com.crxmarkets.web.client.shared.CalculatorResource;
 import com.crxmarkets.web.client.shared.HistoryItem;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.http.client.Request;
+import com.google.gwt.regexp.shared.RegExp;
+import com.google.gwt.regexp.shared.SplitResult;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.TextBox;
 import elemental2.dom.HTMLDivElement;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.ErrorCallback;
@@ -44,8 +47,6 @@ import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.ForEvent;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
 import org.slf4j.Logger;
-import com.crxmarkets.web.client.local.CalcWidgetEvent.Type;
-import javax.enterprise.inject.Instance;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -57,6 +58,10 @@ import org.slf4j.LoggerFactory;
 public class CalculatorPage implements IsElement {
 
     private static final Logger LOG = LoggerFactory.getLogger(CalculatorPage.class);
+
+    private RegExp junkSymbolsPattern;
+    private RegExp numbersPattern;
+    private RegExp delimiterPattern;
 
     @Inject
     Caller<CalculatorResource> calculatorResource;
@@ -80,9 +85,15 @@ public class CalculatorPage implements IsElement {
 
     @PostConstruct
     public void setup() {
-        LOG.info("Default page instance {} has been created.", CalculatorPage.class.getName());
+
+        junkSymbolsPattern = RegExp.compile("[a-zA-Z!@#$%^&*()_+=]+", "g");
+        numbersPattern = RegExp.compile("(( )?([\\-]?\\d+)([|;,\\s]*))+", "g");
+        delimiterPattern = RegExp.compile("[|;,\\s]+", "g");
+
         calculatorWidget = calculatorWidgetInst.get();
         modal.appendChild(calculatorWidget.getElement());
+
+        LOG.info("Default page instance {} has been created.", CalculatorPage.class.getName());
     }
 
     public void onModalCloseButtonClick(final @Observes @CalcWidgetEvent(Type.CLOSE) CalculatorWidget widget) {
@@ -94,21 +105,39 @@ public class CalculatorPage implements IsElement {
     public void onCalculateClick(final @ForEvent("click") ClickEvent event) {
 
         String rawInputString = heightsInput.getText();
-        //TODO: Verify the rawInputString
+        String preparedString = junkSymbolsPattern.replace(rawInputString, "");
+        LOG.debug("Prepared input: {}", preparedString);
 
-        String[] numbersString = rawInputString.split(" ");
-        final List<Integer> hills = Stream
-                .of(numbersString)
-                .map(Integer::valueOf)
-                .collect(Collectors.toList());
+        if (numbersPattern.test(preparedString.trim())) {
+            LOG.debug("The input matches to a string of delimeted numbers");
+        } else {
+            throw new IllegalArgumentException("The input doesn't seem to be a list of delimited integers.");
+        }
+
+        SplitResult split = delimiterPattern.split(preparedString.trim());
+        if (split.length() == 0) {
+            String msg = "Correct the input please. No heights data found in it. There is nothing to process.";
+            LOG.warn(msg);
+            Window.alert(msg);
+            return;
+        }
+
+        ArrayList<Integer> hills = new ArrayList<>(split.length());
+        for (int i = 0; i < split.length(); i++) {
+            hills.add(Integer.valueOf(split.get(i)));
+        }
+
+        LOG.debug("Hills: {}", hills.toString());
 
         RemoteCallback<CalculationResult> responseCallback = (response) -> {
-            saveCalculationToHistory(response);
             presentResults(response);
+            saveCalculationToHistory(response);
         };
 
         ErrorCallback errorCallback = (RestErrorCallback) (Request message, Throwable throwable) -> {
-            if (throwable != null) {
+            if (throwable == null) {
+                Window.alert("Unknown error occured while requesting calculator resource.");
+            } else {
                 String details = throwable.getMessage();
                 Window.alert(details);
             }
@@ -122,6 +151,9 @@ public class CalculatorPage implements IsElement {
     }
 
     protected void saveCalculationToHistory(CalculationResult model) {
+
+        LOG.debug("Model: {}", model.toString());
+
         HistoryItem hi = new HistoryItem();
         hi.setDateTime(new Date());
         hi.setTotal(model.getTotalVolume());

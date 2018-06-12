@@ -13,28 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.web.client.local.img;
+package com.crxmarkets.dao;
+
+import com.crxmarkets.web.client.shared.HistoryItem;
+import java.util.List;
+import javax.ejb.Local;
 
 /**
  *
  * @author skrymets
  */
-public class Line {
+@Local
+public interface HistoryEntityServiceLocal {
 
-    private final Point start;
-    private final Point end;
+    void create(final HistoryItem newHistoryItem);
 
-    public Line(Point start, Point end) {
-        this.start = start;
-        this.end = end;
-    }
+    HistoryItem find(final Long id);
 
-    public Point getStart() {
-        return start;
-    }
+    boolean delete(final Long id);
 
-    public Point getEnd() {
-        return end;
-    }
+    List<HistoryItem> getFullHistory();
+
+    void update(final HistoryItem historyItem);
+
+    int clearHistory();
 
 }

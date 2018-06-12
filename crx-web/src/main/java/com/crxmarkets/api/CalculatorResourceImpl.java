@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.web.server;
+package com.crxmarkets.api;
 
-import com.crxmarkets.services.HistoryEntityServiceLocal;
+import com.crxmarkets.dao.HistoryEntityServiceLocal;
 import com.crxmarkets.services.VolumeCalculatorServiceLocal;
 import com.crxmarkets.web.client.shared.CalculationResult;
 import com.crxmarkets.web.client.shared.CalculationTask;

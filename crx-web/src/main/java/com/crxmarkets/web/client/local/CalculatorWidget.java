@@ -16,7 +16,7 @@
 package com.crxmarkets.web.client.local;
 
 import com.crxmarkets.web.client.local.CalcWidgetEvent.Type;
-import com.crxmarkets.web.client.local.img.Rect;
+import com.crxmarkets.web.client.local.graphics.Rect;
 import com.crxmarkets.web.client.shared.CalculationResult;
 import com.crxmarkets.web.client.shared.CalculatorResource;
 import com.google.gwt.event.dom.client.ClickEvent;
