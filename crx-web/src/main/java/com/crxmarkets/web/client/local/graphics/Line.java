@@ -13,28 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.web.client.local.img;
+package com.crxmarkets.web.client.local.graphics;
 
 /**
  *
  * @author skrymets
  */
-public class Point {
+public class Line {
 
-    private final double x;
-    private final double y;
+    private final Point start;
+    private final Point end;
 
-    public Point(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public Line(Point start, Point end) {
+        this.start = start;
+        this.end = end;
     }
 
-    public double getX() {
-        return x;
+    public Point getStart() {
+        return start;
     }
 
-    public double getY() {
-        return y;
+    public Point getEnd() {
+        return end;
     }
 
 }
