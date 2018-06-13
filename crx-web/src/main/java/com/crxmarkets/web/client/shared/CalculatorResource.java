@@ -31,6 +31,12 @@ import javax.ws.rs.core.MediaType;
 @Path("calculator")
 public interface CalculatorResource {
 
+    @GET
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("echo/{data}")
+    public String testMethod(@PathParam("data") String data);
+
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
