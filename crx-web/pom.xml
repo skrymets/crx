@@ -270,6 +270,26 @@
                 </dependency>
         
                 <dependency>
+                    <groupId>org.jboss.arquillian.extension</groupId>
+                    <artifactId>arquillian-rest-client-api</artifactId>
+                    <version>1.0.0.Final-SNAPSHOT</version>
+                    <scope>test</scope>
+                </dependency>
+                
+                <dependency>
+                    <groupId>org.jboss.arquillian.extension</groupId>
+                    <artifactId>arquillian-rest-client-impl-3x</artifactId>
+                    <version>1.0.0.Final-SNAPSHOT</version>
+                    <scope>test</scope>
+                </dependency>
+                
+                <dependency>
+                    <groupId>org.jboss.resteasy</groupId>
+                    <artifactId>resteasy-jackson2-provider</artifactId>
+                    <scope>test</scope>
+                </dependency>
+        
+                <dependency>
                     <groupId>org.jboss.shrinkwrap</groupId>
                     <artifactId>shrinkwrap-api</artifactId>
                     <scope>test</scope>
@@ -372,6 +392,7 @@
                                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                         <jboss.home>${jboss.home}</jboss.home>
                                         <module.path>${jboss.home}/modules</module.path>
+                                        <logging.configuration>src/main/resources/logging.properties</logging.configuration>
                                     </systemPropertyVariables>
                                     <redirectTestOutputToFile>false</redirectTestOutputToFile>
                                 </configuration>
