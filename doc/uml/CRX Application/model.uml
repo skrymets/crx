@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_fPzFIG5mEeidSsAtXzeiaw" name="NewModel">
-  <packagedElement xmi:type="uml:StateMachine" xmi:id="_ivjJgG5mEeidSsAtXzeiaw" name="Recognizer Sate Machine">
-    <region xmi:id="_ivjJgW5mEeidSsAtXzeiaw" name="Region1">
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_ivjJgG5mEeidSsAtXzeiaw" name="Peaks Recognizer Sate Machine">
+    <region xmi:id="_ivjJgW5mEeidSsAtXzeiaw" name="Main Region">
       <transition xmi:id="_wyzzcG5nEeidSsAtXzeiaw" source="_bqWL8G5nEeidSsAtXzeiaw" target="_A8rPcG5nEeidSsAtXzeiaw"/>
       <transition xmi:id="_2lp70G5nEeidSsAtXzeiaw" source="_A8rPcG5nEeidSsAtXzeiaw" target="_6zVSoG5mEeidSsAtXzeiaw">
         <ownedComment xmi:id="_KySNMG5oEeidSsAtXzeiaw" annotatedElement="_2lp70G5nEeidSsAtXzeiaw">
@@ -54,5 +54,48 @@
       <subvertex xmi:type="uml:FinalState" xmi:id="_gxHRcG5nEeidSsAtXzeiaw" name="No more heights"/>
     </region>
   </packagedElement>
-  <packagedElement xmi:type="uml:StateMachine" xmi:id="_EGjKcG5nEeidSsAtXzeiaw" name="CompletePatternState"/>
+  <packagedElement xmi:type="uml:Component" xmi:id="_-cj5gG8eEei19sJRyk-61w" name="GWT Proxy" isAbstract="true"/>
+  <packagedElement xmi:type="uml:Component" xmi:id="_F8Dw8G8fEei19sJRyk-61w" name="CalculatorResource"/>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_MEfu0G8fEei19sJRyk-61w" name="UI User">
+    <eAnnotations xmi:id="_MEo4wG8fEei19sJRyk-61w" source="http://www.eclipse.org/uml2/2.0.0/UML">
+      <details xmi:id="_MEo4wW8fEei19sJRyk-61w" key="Human"/>
+    </eAnnotations>
+    <generalization xmi:id="_gm2YkG8fEei19sJRyk-61w" general="_N27VwG8fEei19sJRyk-61w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_N27VwG8fEei19sJRyk-61w" name="API User" isAbstract="true">
+    <eAnnotations xmi:id="_N27VwW8fEei19sJRyk-61w" source="http://www.eclipse.org/uml2/2.0.0/UML">
+      <details xmi:id="_N27Vwm8fEei19sJRyk-61w" key="Human"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_RmDS4G8fEei19sJRyk-61w" name="Submit a task for Calculator">
+    <include xmi:id="_vtC7oG8fEei19sJRyk-61w" addition="_rwUnYG8fEei19sJRyk-61w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_jQwaEG8fEei19sJRyk-61w" memberEnd="_jQwaEW8fEei19sJRyk-61w _jQwaEm8fEei19sJRyk-61w">
+    <ownedEnd xmi:id="_jQwaEW8fEei19sJRyk-61w" type="_N27VwG8fEei19sJRyk-61w" association="_jQwaEG8fEei19sJRyk-61w"/>
+    <ownedEnd xmi:id="_jQwaEm8fEei19sJRyk-61w" type="_RmDS4G8fEei19sJRyk-61w" association="_jQwaEG8fEei19sJRyk-61w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_lJak0G8fEei19sJRyk-61w" name="View the Calculation Result">
+    <extend xmi:id="_qc0_MG8fEei19sJRyk-61w" extendedCase="_RmDS4G8fEei19sJRyk-61w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_pyNU4G8fEei19sJRyk-61w" memberEnd="_pyNU4W8fEei19sJRyk-61w _pyNU4m8fEei19sJRyk-61w">
+    <ownedEnd xmi:id="_pyNU4W8fEei19sJRyk-61w" type="_N27VwG8fEei19sJRyk-61w" association="_pyNU4G8fEei19sJRyk-61w"/>
+    <ownedEnd xmi:id="_pyNU4m8fEei19sJRyk-61w" type="_lJak0G8fEei19sJRyk-61w" association="_pyNU4G8fEei19sJRyk-61w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_rwUnYG8fEei19sJRyk-61w" name="Save the Result to a History"/>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_zk-PcG8fEei19sJRyk-61w" name="Review the History of Calculations">
+    <extend xmi:id="_IV0BIG8gEei19sJRyk-61w" extendedCase="_ERqPMG8gEei19sJRyk-61w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_2pqvgG8fEei19sJRyk-61w" memberEnd="_2pqvgW8fEei19sJRyk-61w _2pqvgm8fEei19sJRyk-61w">
+    <ownedEnd xmi:id="_2pqvgW8fEei19sJRyk-61w" type="_N27VwG8fEei19sJRyk-61w" association="_2pqvgG8fEei19sJRyk-61w"/>
+    <ownedEnd xmi:id="_2pqvgm8fEei19sJRyk-61w" type="_zk-PcG8fEei19sJRyk-61w" association="_2pqvgG8fEei19sJRyk-61w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_57Fc8G8fEei19sJRyk-61w" name="Cleanup Calculations History">
+    <extend xmi:id="_McaqIG8gEei19sJRyk-61w" extendedCase="_JV4XAG8gEei19sJRyk-61w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_8ZpKEG8fEei19sJRyk-61w" memberEnd="_8ZpKEW8fEei19sJRyk-61w _8ZyUAG8fEei19sJRyk-61w">
+    <ownedEnd xmi:id="_8ZpKEW8fEei19sJRyk-61w" type="_N27VwG8fEei19sJRyk-61w" association="_8ZpKEG8fEei19sJRyk-61w"/>
+    <ownedEnd xmi:id="_8ZyUAG8fEei19sJRyk-61w" type="_57Fc8G8fEei19sJRyk-61w" association="_8ZpKEG8fEei19sJRyk-61w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_ERqPMG8gEei19sJRyk-61w" name="Review a Single History Entity"/>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_JV4XAG8gEei19sJRyk-61w" name="Delete a Single Entity"/>
 </uml:Model>
