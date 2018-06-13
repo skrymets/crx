@@ -21,15 +21,14 @@ import com.crxmarkets.web.client.shared.CalculationResult;
 import com.crxmarkets.web.client.shared.CalculationTask;
 import com.crxmarkets.web.client.shared.CalculatorResource;
 import com.crxmarkets.web.client.shared.HistoryItem;
-import com.google.gwt.regexp.shared.RegExp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.regex.Pattern;
 
 public class CalculatorResourceImpl implements CalculatorResource {
 
@@ -42,6 +41,11 @@ public class CalculatorResourceImpl implements CalculatorResource {
     private HistoryEntityServiceLocal historyEntityService;
 
     private final Pattern listOfNumbersPattern = Pattern.compile("(([\\-]?\\d+[ ]))+");
+
+    @Override
+    public String testMethod(String data) {
+        return data;
+    }
 
     @Override
     public CalculationResult calculate(CalculationTask task) {
@@ -83,10 +87,10 @@ public class CalculatorResourceImpl implements CalculatorResource {
             throw new BadRequestException("History item data is incomplete.");
         }
 
-        if (!listOfNumbersPattern.matcher(hi.getCalculation()).matches()
-                || !listOfNumbersPattern.matcher(hi.getCalculation()).matches()) {
-            throw new BadRequestException("History item data is incomplete.");
-        }
+//        if (!listOfNumbersPattern.matcher(hi.getCalculation()).matches()
+//                || !listOfNumbersPattern.matcher(hi.getCalculation()).matches()) {
+//            throw new BadRequestException("History item data is incomplete.");
+//        }
 
         historyEntityService.create(hi);
         return hi.getId();
