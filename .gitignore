@@ -14,3 +14,5 @@
 /crx-web/src/main/webapp/WEB-INF/lib
 /crx-web/src/main/webapp/app
 /.errai
+/crx-web/nbactions.xml
+/doc/uml/.metadata

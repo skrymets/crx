@@ -6,6 +6,7 @@
         </exclusions>
         <dependencies>
             <module name="org.jboss.resteasy.resteasy-jackson2-provider" services="import"/>
+            <module name="org.dom4j"/>
         </dependencies>
     </deployment>
 
