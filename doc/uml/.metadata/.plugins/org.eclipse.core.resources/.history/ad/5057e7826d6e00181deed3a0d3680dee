@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_fPzFIG5mEeidSsAtXzeiaw" name="NewModel">
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_ivjJgG5mEeidSsAtXzeiaw" name="Recognizer Sate Machine">
+    <region xmi:id="_ivjJgW5mEeidSsAtXzeiaw" name="Region1">
+      <transition xmi:id="_wyzzcG5nEeidSsAtXzeiaw" source="_bqWL8G5nEeidSsAtXzeiaw" target="_A8rPcG5nEeidSsAtXzeiaw"/>
+      <transition xmi:id="_2lp70G5nEeidSsAtXzeiaw" source="_A8rPcG5nEeidSsAtXzeiaw" target="_6zVSoG5mEeidSsAtXzeiaw">
+        <ownedComment xmi:id="_KySNMG5oEeidSsAtXzeiaw" annotatedElement="_2lp70G5nEeidSsAtXzeiaw">
+          <body></body>
+        </ownedComment>
+        <trigger xmi:id="_OCOT8G5oEeidSsAtXzeiaw" name="A trend is going UP"/>
+      </transition>
+      <transition xmi:id="_3LraAG5nEeidSsAtXzeiaw" source="_A8rPcG5nEeidSsAtXzeiaw" target="_9khA0G5mEeidSsAtXzeiaw">
+        <trigger xmi:id="_RIxOIG5oEeidSsAtXzeiaw" name="Value remains the same"/>
+      </transition>
+      <transition xmi:id="_3uOGYG5nEeidSsAtXzeiaw" source="_A8rPcG5nEeidSsAtXzeiaw" target="_GTm34G5nEeidSsAtXzeiaw">
+        <trigger xmi:id="_UpbRcG5oEeidSsAtXzeiaw" name="A trend is going DOWN"/>
+      </transition>
+      <transition xmi:id="_eG4jAG5rEeidSsAtXzeiaw" source="_GTm34G5nEeidSsAtXzeiaw" target="_6zVSoG5mEeidSsAtXzeiaw">
+        <trigger xmi:id="_fMjxoG5rEeidSsAtXzeiaw" name="A trend is going UP"/>
+      </transition>
+      <transition xmi:id="_m6tJEG5rEeidSsAtXzeiaw" source="_GTm34G5nEeidSsAtXzeiaw" target="_4TRJoG5mEeidSsAtXzeiaw">
+        <trigger xmi:id="_oZ31wG5rEeidSsAtXzeiaw" name="A trend is going DOWN"/>
+        <trigger xmi:id="_qhK5cG5rEeidSsAtXzeiaw" name="A value remains the same"/>
+      </transition>
+      <transition xmi:id="_ya2ygG5rEeidSsAtXzeiaw" source="_9khA0G5mEeidSsAtXzeiaw" target="_6zVSoG5mEeidSsAtXzeiaw">
+        <trigger xmi:id="_zMYWEG5rEeidSsAtXzeiaw" name="A trend is going UP"/>
+      </transition>
+      <subvertex xmi:type="uml:State" xmi:id="_4TRJoG5mEeidSsAtXzeiaw" name="GoingDownState"/>
+      <subvertex xmi:type="uml:State" xmi:id="_6zVSoG5mEeidSsAtXzeiaw" name="GoingUpState"/>
+      <subvertex xmi:type="uml:State" xmi:id="_9khA0G5mEeidSsAtXzeiaw" name="OnPlateauState"/>
+      <subvertex xmi:type="uml:State" xmi:id="_A8rPcG5nEeidSsAtXzeiaw" name="InitialState"/>
+      <subvertex xmi:type="uml:State" xmi:id="_GTm34G5nEeidSsAtXzeiaw" name="CompletePatternState"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_bqWL8G5nEeidSsAtXzeiaw" name="Start"/>
+      <subvertex xmi:type="uml:FinalState" xmi:id="_gxHRcG5nEeidSsAtXzeiaw" name="No more heights"/>
+    </region>
+  </packagedElement>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_EGjKcG5nEeidSsAtXzeiaw" name="CompletePatternState"/>
+</uml:Model>
