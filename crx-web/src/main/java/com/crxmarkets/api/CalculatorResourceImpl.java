@@ -21,6 +21,7 @@ import com.crxmarkets.web.client.shared.CalculationResult;
 import com.crxmarkets.web.client.shared.CalculationTask;
 import com.crxmarkets.web.client.shared.CalculatorResource;
 import com.crxmarkets.web.client.shared.HistoryItem;
+import com.google.gwt.regexp.shared.RegExp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -28,6 +29,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.regex.Pattern;
 
 public class CalculatorResourceImpl implements CalculatorResource {
 
@@ -38,6 +40,8 @@ public class CalculatorResourceImpl implements CalculatorResource {
 
     @EJB
     private HistoryEntityServiceLocal historyEntityService;
+
+    private final Pattern listOfNumbersPattern = Pattern.compile("(([\\-]?\\d+[ ]))+");
 
     @Override
     public CalculationResult calculate(CalculationTask task) {
@@ -69,9 +73,23 @@ public class CalculatorResourceImpl implements CalculatorResource {
     }
 
     @Override
-    public long saveInHistory(HistoryItem historyItem) {
-        historyEntityService.create(historyItem);
-        return historyItem.getId();
+    public long saveInHistory(HistoryItem hi) {
+        if (hi == null
+                || hi.getTask() == null
+                || hi.getTask().isEmpty()
+                || hi.getDateTime() == null
+                || hi.getCalculation() == null
+                || hi.getCalculation().isEmpty()) {
+            throw new BadRequestException("History item data is incomplete.");
+        }
+
+        if (!listOfNumbersPattern.matcher(hi.getCalculation()).matches()
+                || !listOfNumbersPattern.matcher(hi.getCalculation()).matches()) {
+            throw new BadRequestException("History item data is incomplete.");
+        }
+
+        historyEntityService.create(hi);
+        return hi.getId();
     }
 
     @Override
@@ -95,6 +113,10 @@ public class CalculatorResourceImpl implements CalculatorResource {
 
     @Override
     public boolean deleteHistoryItem(long id) {
+        HistoryItem item = historyEntityService.find(id);
+        if (item == null) {
+            throw new NotFoundException();
+        }
         return historyEntityService.delete(id);
     }
 
