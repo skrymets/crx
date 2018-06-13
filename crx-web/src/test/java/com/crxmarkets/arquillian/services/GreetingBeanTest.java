@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.crxmarkets.services;
+package com.crxmarkets.arquillian.services;
 
+import com.crxmarkets.services.VolumeCalculatorService;
+import com.crxmarkets.services.VolumeCalculatorServiceLocal;
 import javax.ejb.EJB;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -22,12 +24,14 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RunWith(Arquillian.class)
+//@Ignore
 public class GreetingBeanTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(GreetingBeanTest.class);
@@ -43,31 +47,25 @@ public class GreetingBeanTest {
 //                .up().up().up();
 //
 //        LOG.info(descriptor.exportAsString());
-        
+//                .addAsManifestResource(new StringAsset(descriptor.exportAsString()), "jboss-deployment-structure.xml")
+
         JavaArchive jar = ShrinkWrap
                 .create(JavaArchive.class, "crx-test.jar")
-                .addClasses(
-                        VolumeCalculatorService.class
-                // MessageProviderBean.class,
-                // TemplateType.class
-                )
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-//                .addAsManifestResource(new StringAsset(descriptor.exportAsString()), "jboss-deployment-structure.xml")
-                ;
+                .addPackage(VolumeCalculatorServiceLocal.class.getPackage())
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
         LOG.info(jar.toString(true));
         return jar;
     }
 
-    // @Inject
     @EJB
-    VolumeCalculatorService bean;
+    VolumeCalculatorServiceLocal bean;
 
     @Test
     public void startAndHealthCheck() {
         assertNotNull(bean);
 
-        Integer volume = bean.calculateTotalVolume(new int[]{}, new int[]{});
-        assertEquals(volume, Long.valueOf(0));
+        int volume = bean.calculateTotalVolume(new int[]{}, new int[]{});
+        assertTrue(volume == Integer.MIN_VALUE);
         LOG.info(String.valueOf(volume));
     }
 
