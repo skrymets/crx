@@ -392,7 +392,9 @@
                                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                         <jboss.home>${jboss.home}</jboss.home>
                                         <module.path>${jboss.home}/modules</module.path>
+                                        <!-- 
                                         <logging.configuration>src/main/resources/logging.properties</logging.configuration>
+                                        -->
                                     </systemPropertyVariables>
                                     <redirectTestOutputToFile>false</redirectTestOutputToFile>
                                 </configuration>
