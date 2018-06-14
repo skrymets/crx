@@ -34,6 +34,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -134,13 +135,26 @@ public class CalculatorResourceTest {
         hi.setCalculation("3 3 3 4");
         hi.setTotal(3);
 
-        Integer response = target.request(MediaType.APPLICATION_JSON)
-                .post(Entity.json(hi), Integer.class);
+        Long response = target.request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(hi), Long.class);
 
         assertNotNull(response);
-        System.out.println("New item ID: " + String.valueOf(response));
+        LOG.info("New item ID: {}", String.valueOf(response));
     }
 
+    @Test
+    public void testCreateCorrectHistoryItemArquillianRes(@ArquillianResteasyResource CalculatorResource resource) {
+        HistoryItem hi = new HistoryItem();
+        hi.setDateTime(new Date());
+        hi.setTask("3 2 1 4");
+        hi.setCalculation("3 3 3 4");
+        hi.setTotal(3);
+
+        Long response = resource.saveInHistory(hi);
+        assertNotNull(response);
+        LOG.info("New item ID: {}", String.valueOf(response));
+
+    }
 //    @Test
 //    public void testCreateInvalidHistoryItem() {
 //    }
