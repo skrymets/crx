@@ -407,15 +407,23 @@
                 
         <profile>
             <id>application-server</id>
+            <!--
             <activation>
                 <activeByDefault>true</activeByDefault>
+            </activation>
+            -->
+                 
+            <activation>
+                <property>
+                    <name>!skipApplicationServerProfile</name>
+                </property>
             </activation>
                  
             <dependencies>
                 <dependency>
                     <groupId>com.google.gwt</groupId>
                     <artifactId>gwt-user</artifactId>
-                    <scope>provided</scope>
+                    <scope>compile</scope>
                 </dependency>
 
                 <dependency>
@@ -460,7 +468,7 @@
                     <artifactId>jboss-ejb-api_3.2_spec</artifactId>
                     <scope>provided</scope>
                 </dependency>
-
+ 
                 <dependency>
                     <groupId>com.google.elemental2</groupId>
                     <artifactId>elemental2-dom</artifactId>
@@ -470,6 +478,13 @@
                 <dependency>
                     <groupId>com.google.elemental2</groupId>
                     <artifactId>elemental2-core</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                
+                <dependency>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-dev</artifactId>
+                    <version>${gwt.version}</version>
                     <scope>provided</scope>
                 </dependency>
  
@@ -552,11 +567,6 @@
                             <dependency>
                                 <groupId>com.google.gwt</groupId>
                                 <artifactId>gwt-user</artifactId>
-                                <version>${gwt.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>com.google.gwt</groupId>
-                                <artifactId>gwt-dev</artifactId>
                                 <version>${gwt.version}</version>
                             </dependency>
                         </dependencies>
