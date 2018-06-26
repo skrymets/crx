@@ -9,10 +9,8 @@
             <property name="jbossHome">dist/wildfly-10.0.0.Final</property>
             <property name="modulePath">dist/wildfly-10.0.0.Final/modules</property>
             <!--            
-            <property name="jbossHome">dist/jboss-as-7.1.1.Final</property>
             <property name="java.util.logging.manager">org.jboss.logmanager.LogManager</property>
-            -->
-            <!--            
+            <property name="jbossHome">dist/jboss-as-7.1.1.Final</property>
             <property name="logging.configuration">src/main/resources/logging.properties</property>
             -->
         </configuration>

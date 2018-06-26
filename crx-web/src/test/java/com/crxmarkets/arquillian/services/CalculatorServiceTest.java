@@ -16,17 +16,17 @@
 package com.crxmarkets.arquillian.services;
 
 import com.crxmarkets.alg.rain.Calculator2;
-import com.crxmarkets.services.VolumeCalculatorService;
 import com.crxmarkets.services.VolumeCalculatorServiceLocal;
+import java.io.File;
 import java.util.Arrays;
 import javax.ejb.EJB;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -39,15 +39,35 @@ public class CalculatorServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(CalculatorServiceTest.class);
 
     @Deployment
-    public static JavaArchive createDeployment() {
+    public static WebArchive createDeployment() {
 
-        JavaArchive jar = ShrinkWrap
-                .create(JavaArchive.class, "crx-test.jar")
+        // -------------------------------------------------------------------------------
+        // Import Maven runtime dependencies
+        // -------------------------------------------------------------------------------
+//        File[] runtimeDependencies = Maven.resolver()
+//                .loadPomFromFile("pom.xml", "ejb-test")
+//                .importRuntimeDependencies()
+//                .resolve()
+//                //.withTransitivity()
+//                .withoutTransitivity()
+//                .asFile();
+//        
+//        LOG.info("Resolved libraries: {}", Arrays.asList(runtimeDependencies));
+        
+        WebArchive war = ShrinkWrap
+                .create(WebArchive.class, "service-test.war")
                 .addPackage(VolumeCalculatorServiceLocal.class.getPackage())
                 .addPackage(Calculator2.class.getPackage())
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-        LOG.info(jar.toString(true));
-        return jar;
+                //.addAsLibraries(runtimeDependencies)
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsResource("log4j.properties", "log4j.properties")
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                .addAsWebInfResource("test-beans.xml", "beans.xml")
+                .addAsWebInfResource("test-jboss-deployment-structure.xml", "jboss-deployment-structure.xml");
+        
+        LOG.info(war.toString(true));
+        
+        return war;
     }
 
     @EJB
