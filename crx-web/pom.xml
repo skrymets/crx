@@ -127,7 +127,7 @@
             <artifactId>crx-calc</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+               
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
@@ -336,6 +336,19 @@
                         </compilerArguments>
                     </configuration>
                 </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.21.0</version>
+                    <configuration>
+                        <forkCount>1</forkCount>
+                        <reuseForks>true</reuseForks>
+                        <trimStackTrace>false</trimStackTrace>
+                        <printSummary>true</printSummary>
+                        <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         
@@ -348,13 +361,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.21.0</version>
                 <configuration>
-                    <skipTests>false</skipTests>
-
-                    <forkCount>1</forkCount>
-                    <reuseForks>true</reuseForks>
-
                     <environmentVariables>
                         <JBOSS_HOME>${jboss.home.dist}</JBOSS_HOME>
                     </environmentVariables>
@@ -380,10 +387,6 @@
                     <!-- Caution: no linebreak here !-->
                     <argLine>-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true</argLine>
                     <!-- -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Djava.endorsed.dirs=${jboss.home.dist}/lib/endorsed -Djboss.home=${jboss.home.dist} -Djboss.boot.server.log.dir=${jboss.home.dist} -->
-
-                    <trimStackTrace>false</trimStackTrace>
-                    <printSummary>true</printSummary>
-                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
                 </configuration>
             </plugin>
             
