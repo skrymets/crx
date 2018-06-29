@@ -61,14 +61,28 @@ public class CalculatorResourceTest {
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
 
+        // -------------------------------------------------------------------------------
+        // Import Maven runtime dependencies
+        // -------------------------------------------------------------------------------
+//        File[] runtimeDependencies = Maven.resolver()
+//                //.loadPomFromFile("pom.xml", "ejb-test")
+//                //.importCompileAndRuntimeDependencies()
+//                .resolve("")
+//                //.withTransitivity()
+//                .withoutTransitivity()
+//                .asFile();
+//        
+//        LOG.info("Resolved libraries: {}", Arrays.asList(runtimeDependencies));
+
         WebArchive war = ShrinkWrap
-                .create(WebArchive.class, "crx-test.war")
+                .create(WebArchive.class, "rest-test.war")
                 .addPackage(VolumeCalculatorServiceLocal.class.getPackage())
                 .addPackage(CalculatorResource.class.getPackage())
                 .addPackage(CalculatorResourceImpl.class.getPackage())
                 .addPackage(HistoryEntityService.class.getPackage())
+                .addPackage(com.crxmarkets.web.client.shared.HistoryItem.class.getPackage())
                 .addPackage(Calculator2.class.getPackage())
-                .addAsDirectory("WEB-INF/lib")
+                //.addAsLibraries(runtimeDependencies)
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("log4j.properties", "log4j.properties")
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
