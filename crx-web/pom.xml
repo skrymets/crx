@@ -143,7 +143,7 @@
                     <artifactId>errai-jaxrs-provider</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -359,6 +359,83 @@
             </plugin>
             
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <module>com.crxmarkets.web.Main</module>
+                            
+                    <logLevel>INFO</logLevel>
+                    <style>PRETTY</style>
+
+                    <!--
+                            <noServer>true</noServer>
+                    -->                    
+                    <noServer>false</noServer>
+                    <extraJvmArgs>-Xmx4096m -XX:CompileThreshold=7000 -Derrai.jboss.home=${jboss.home.dist} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
+                    <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
+                    <runTarget>${errai.dev.context}/</runTarget>
+                    <!--<hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>-->
+                    <hostedWebapp>${project.basedir}/src/main/webapp</hostedWebapp>
+
+                    <disableCastChecking>true</disableCastChecking>
+                    <soycDetailed>false</soycDetailed>
+                    <strict>true</strict>
+                    <compileReport>false</compileReport>
+                    <saveSource>true</saveSource>
+
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-dev</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+                    
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class</packagingExcludes>
+                    <archive>
+                        <manifestEntries>
+                            <Dependencies>org.jboss.weld.core,org.jboss.weld.spi,org.slf4j,javax.ws.rs.api,javax.servlet.api,org.jboss.resteasy.resteasy-jaxrs,org.jboss.resteasy.resteasy-jackson-provider</Dependencies>
+                        </manifestEntries>
+                    </archive>
+                    <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+                    <webResources>
+                        <resource>
+                            <directory>${basedir}/target/extra/app/src</directory>
+                            <targetPath>src</targetPath>
+                        </resource>
+                        <resource>
+                            <directory>${basedir}/target/extra/app/symbolMaps</directory>
+                            <includes>
+                                <include>*.json</include>
+                            </includes>
+                            <targetPath>src</targetPath>
+                        </resource>
+                    </webResources>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
@@ -460,7 +537,7 @@
             </build>
         </profile>
                         
-<!--
+                    <!--
         <profile>
             <id>application-server</id>
 
@@ -474,111 +551,37 @@
                 <finalName>${project.artifactId}</finalName>
                 
                 <plugins>
-
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>gwt-maven-plugin</artifactId>
-                        <version>${gwt.version}</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>compile</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <module>com.crxmarkets.web.Main</module>
-                            
-                            <logLevel>INFO</logLevel>
-                            <style>PRETTY</style>
-          
-                            <noServer>false</noServer>
-                            <extraJvmArgs>-Xmx4096m -XX:CompileThreshold=7000 -Derrai.jboss.home=${jboss.home.dist} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
-                            <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
-                            <runTarget>${errai.dev.context}/</runTarget>
-                            <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
-                            <hostedWebapp>${project.basedir}/src/main/webapp</hostedWebapp>
-
-                            <disableCastChecking>true</disableCastChecking>
-                            <soycDetailed>false</soycDetailed>
-                            <strict>true</strict>
-                            <compileReport>false</compileReport>
-                            <saveSource>true</saveSource>
-
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.google.gwt</groupId>
-                                <artifactId>gwt-user</artifactId>
-                                <version>${gwt.version}</version>
-                            </dependency>                
-                            <dependency>
-                                <groupId>com.google.gwt</groupId>
-                                <artifactId>gwt-dev</artifactId>
-                                <version>${gwt.version}</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
                     
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>3.2.1</version>
-                        <configuration>
-                            <packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class</packagingExcludes>
-                            <archive>
-                                <manifestEntries>
-                                    <Dependencies>org.jboss.weld.core,org.jboss.weld.spi,org.slf4j,javax.ws.rs.api,javax.servlet.api,org.jboss.resteasy.resteasy-jaxrs,org.jboss.resteasy.resteasy-jackson-provider</Dependencies>
-                                </manifestEntries>
-                            </archive>
-                            <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
-                            <webResources>
-                                <resource>
-                                    <directory>${basedir}/target/extra/app/src</directory>
-                                    <targetPath>src</targetPath>
-                                </resource>
-                                <resource>
-                                    <directory>${basedir}/target/extra/app/symbolMaps</directory>
-                                    <includes>
-                                        <include>*.json</include>
-                                    </includes>
-                                    <targetPath>src</targetPath>
-                                </resource>
-                            </webResources>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                        </configuration>
-                    </plugin>
-                    
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>2.8</version>
-                        <executions>
-                            <execution>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${endorsed.dir}</outputDirectory>
-                                    <silent>true</silent>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>javax</groupId>
-                                            <artifactId>javaee-endorsed-api</artifactId>
-                                            <version>7.0</version>
-                                            <type>jar</type>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-dependency-plugin</artifactId>
+                                    <version>2.8</version>
+                                    <executions>
+                                        <execution>
+                                            <phase>validate</phase>
+                                            <goals>
+                                                <goal>copy</goal>
+                                            </goals>
+                                            <configuration>
+                                                <outputDirectory>${endorsed.dir}</outputDirectory>
+                                                <silent>true</silent>
+                                                <artifactItems>
+                                                    <artifactItem>
+                                                        <groupId>javax</groupId>
+                                                        <artifactId>javaee-endorsed-api</artifactId>
+                                                        <version>7.0</version>
+                                                        <type>jar</type>
+                                                    </artifactItem>
+                                                </artifactItems>
+                                            </configuration>
+                                        </execution>
+                                    </executions>
+                                </plugin>
             
-                        </plugins>
-                    </build>
-                </profile>       
-        -->
+                </plugins>
+            </build>
+        </profile>       
+                    -->
              
     </profiles>
     
